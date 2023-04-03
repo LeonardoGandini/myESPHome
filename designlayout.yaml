@@ -106,10 +106,18 @@ display:
     busy_pin: GPIO25
     reset_pin: GPIO26
     model: 7.50inV2alt
-    #rotation: 180
-    update_interval: 2min
+    rotation: 90
+    update_interval: 12min
     #reset_duration: 2ms
 
     lambda: |-
       ESP_LOGI("display", "Updating...");
       // OUTSIDE
+      //it.line(0, 0, 100, 50);
+    
+      it.line(240, 20, 240, 150);
+      it.line(240, 240, 240, 270);
+
+      it.circle(240, 270, 100);
+
+      it.filled_rectangle(20, 650, 440, 7);
