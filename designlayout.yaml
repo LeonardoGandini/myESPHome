@@ -115,9 +115,17 @@ display:
       // OUTSIDE
       //it.line(0, 0, 100, 50);
     
+      //Linee Verticali
       it.line(240, 20, 240, 150);
-      it.line(240, 240, 240, 270);
+      it.line(240, 390, 240, 530);
+      //Linee Orizzontali
+      it.line(20, 270, 140, 270);
+
+      it.line(360, 270, 460, 270);
 
       it.circle(240, 270, 100);
 
-      it.filled_rectangle(20, 650, 440, 7);
+      it.filled_rectangle(40, 650, 400, 7);
+
+
+      it.strftime(20, 20 , id(font_regular_75), TextAlign::BASELINE_CENTER, "%H:%M", id(homeassistant_time).now());
