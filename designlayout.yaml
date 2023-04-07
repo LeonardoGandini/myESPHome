@@ -147,7 +147,7 @@ display:
       //data
       it.strftime(Ycenter, 175 , id(font_medium_28), TextAlign::CENTER, "%b %d - %A", id(homeassistant_time).now());
       
-      //giorno settimana
+      //mettere temperatura esterna!
       //it.strftime(Ycenter, enwY, id(font_medium_28), TextAlign::CENTER, "%B %A", id(homeassistant_time).now());
 
       //ora
