@@ -54,6 +54,13 @@ font:
       "󰇥" #duck
       ]
 
+  - file: 'fonts/Itim-Regular.ttf'
+    id: clockfont
+    size: 80
+    glyphs:
+      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
+       '1', '2', '3', '4', '5', '6', '7', '8', '9']    
+    
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password    
@@ -119,7 +126,7 @@ display:
       it.line(240, 20, 240, 150);
       it.line(240, 390, 240, 530);
       //Linee Orizzontali
-      it.line(20, 270, 140, 270);
+      it.line(20, 270, 120, 270);
 
       it.line(360, 270, 460, 270);
 
@@ -128,4 +135,4 @@ display:
       it.filled_rectangle(40, 650, 400, 7);
 
 
-      it.strftime(20, 20 , id(font_regular_75), TextAlign::BASELINE_CENTER, "%H:%M", id(homeassistant_time).now());
+      it.strftime(240, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
