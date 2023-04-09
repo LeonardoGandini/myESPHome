@@ -44,7 +44,7 @@ font:
 
   - file: 'fonts/materialdesignicons-webfont.ttf'
     id: icon_font_30
-    size: 45
+    size: 30
     glyphs: [
       "", # mdi-thermometer
       "", # mdi-water-percent
@@ -56,7 +56,7 @@ font:
 
   - file: 'fonts/Itim-Regular.ttf'
     id: clockfont
-    size: 60
+    size: 64
     glyphs:
       ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
        '1', '2', '3', '4', '5', '6', '7', '8', '9']  
@@ -212,7 +212,7 @@ display:
       int Ycenter = 240;
       int jawY = 720;
       int enwY = 365;
-      int grid_thick = 4;
+      int grid_thick = 2;
 
       //Linee Verticali
       //it.line(Ycenter, 20, Ycenter, 150);
@@ -228,12 +228,12 @@ display:
       it.filled_rectangle(40, 660, 400, 3);
 
       //Date
-      it.strftime(107, 710 , id(font_date), TextAlign::CENTER, "%B %d", id(homeassistant_time).now());
-      it.strftime(107, 760 , id(font_date), TextAlign::CENTER, "%A", id(homeassistant_time).now());
+      it.strftime(100, 710 , id(font_date), TextAlign::CENTER, "%B %d", id(homeassistant_time).now());
+      it.strftime(100, 760 , id(font_date), TextAlign::CENTER, "%A", id(homeassistant_time).now());
 
 
       //ora
-      it.strftime(373, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
+      it.strftime(378, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
       
 
       auto time_now = id(homeassistant_time).now().day_of_week;
@@ -264,9 +264,18 @@ display:
       it.printf(Ycenter, 480, id(font_regular), TextAlign::CENTER , "Temp is %.1f°C and Hum is %.2f%%", kitchtemp, kitchhum);
 
 
+      //Living Room
+      it.printf(Ycenter, 540, id(icon_font_30), TextAlign::CENTER , "󰇥");
+      it.printf(Ycenter, 580, id(font_regular), TextAlign::CENTER , "T %.1f°C", livingroomtemp);
+      it.printf(Ycenter, 610, id(font_regular), TextAlign::CENTER , "H %.2f%%", livingroomhum);
+
+      //GRID
+      it.filled_rectangle(0, 0, 480, grid_thick);
       it.filled_rectangle(0, 200, 480, grid_thick);
       it.filled_rectangle(0, 400, 480, grid_thick);
 
+      it.filled_rectangle(0, 0, grid_thick, 400);  
       it.filled_rectangle(120, 0, grid_thick, 400);
       it.filled_rectangle(Ycenter, 0, grid_thick, 400);
       it.filled_rectangle(360, 0, grid_thick, 400);      
+      it.filled_rectangle(477, 0, grid_thick, 400);        
