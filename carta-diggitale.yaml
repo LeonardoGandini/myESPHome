@@ -22,7 +22,7 @@ api:
 
 ota:
   password: "d914193e08e3fb4f1b8b49738565c234"
-  
+
 font:
   - file: 'fonts/Roboto-Regular.ttf'
     id: font_regular
@@ -38,13 +38,13 @@ font:
        'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
        'u', 'v', 'w', 'x', 'y', 'z','å', 'ä', 'ö', '/','º','µ','³']    
     
-  - file: 'fonts/Roboto-Bold.ttf'
-    id: font_medium_28
-    size: 28
+  - file: 'fonts/Itim-Regular.ttf'
+    id: font_date
+    size: 35
 
   - file: 'fonts/materialdesignicons-webfont.ttf'
     id: icon_font_30
-    size: 45
+    size: 30
     glyphs: [
       "", # mdi-thermometer
       "", # mdi-water-percent
@@ -53,6 +53,20 @@ font:
       "󰔏", #temp
       "󰇥" #duck
       ]
+
+  - file: 'fonts/Itim-Regular.ttf'
+    id: clockfont
+    size: 64
+    glyphs:
+      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
+       '1', '2', '3', '4', '5', '6', '7', '8', '9']  
+
+  - file: 'fonts/KleeOne-SemiBold.ttf'
+    id: jaweekfont
+    size: 80
+    glyphs:
+      ['月','火','水','木','金','土','日']    
+
 
 wifi:
   ssid: !secret wifi_ssid
@@ -74,15 +88,73 @@ time:
           - component.update: epaper
 
 sensor:
-  - platform: homeassistant
-    entity_id: sensor.zigbee_33983_1_1_temperature
-    id: my_temp
-
+  # Kitchen
   - platform: homeassistant
     entity_id: sensor.kitchen_temperature
-    id: my_kitchen_temp
+    id: kitchen_temp
+  - platform: homeassistant
+    entity_id: sensor.kitchen_humidity
+    id: kitchen_hum
 
-    
+  # Living Room
+  - platform: homeassistant
+    entity_id: sensor.living_room_temperature
+    id: livingroom_temp
+  - platform: homeassistant
+    entity_id: sensor.living_room_humidity
+    id: livingroom_hum    
+
+  # Master Bedroom
+  - platform: homeassistant
+    entity_id: sensor.master_bedroom_temperature
+    id: mastbed_temp
+  - platform: homeassistant
+    entity_id: sensor.master_bedroom_humidity
+    id: mastbed_hum    
+
+  # Guest Bedroom
+  - platform: homeassistant
+    entity_id: sensor.guest_bedroom_temperature
+    id: guestbed_temp
+  - platform: homeassistant
+    entity_id: sensor.guest_bedroom_humidity
+    id: guestbed_hum  
+
+  # AL Studio
+  - platform: homeassistant
+    entity_id: sensor.al_studio_temperature
+    id: alstudio_temp
+  - platform: homeassistant
+    entity_id: sensor.al_studio_humidity
+    id: alstudio_hum  
+
+  # LG Studio
+  - platform: homeassistant
+    entity_id: sensor.lg_studio_temperature
+    id: lgstudio_temp
+  - platform: homeassistant
+    entity_id: sensor.lg_studio_humidity
+    id: lgstudio_hum  
+
+
+  # Attic
+  - platform: homeassistant
+    entity_id: sensor.zigbee_21602_1_1_temperature
+    id: attic_temp
+  - platform: homeassistant
+    entity_id: sensor.zigbee_21602_1_1_zigbee_21602_1_2_relative_humidity
+    id: attic_hum
+
+  # Server
+  - platform: homeassistant
+    entity_id: sensor.server_temp_temperature
+    id: server_temp
+  - platform: homeassistant
+    entity_id: sensor.server_hum_relative_humidity
+    id: server_hum
+
+
+
 
 binary_sensor:
   - platform: homeassistant
@@ -106,33 +178,104 @@ display:
     busy_pin: GPIO25
     reset_pin: GPIO26
     model: 7.50inV2alt
-    #rotation: 180
-    update_interval: 2min
+    rotation: 90
+    update_interval: 12min
     #reset_duration: 2ms
 
     lambda: |-
       ESP_LOGI("display", "Updating...");
-      // OUTSIDE
+
+      float kitchtemp = id(kitchen_temp).state;
+      float kitchhum = id(kitchen_hum).state;
+
+      float livingroomtemp = id(livingroom_temp).state;
+      float livingroomhum = id(livingroom_hum).state;
+
+      float mastbedtemp = id(mastbed_temp).state;
+      float mastbedhum = id(mastbed_hum).state;
+
+      float guestbedtemp = id(guestbed_temp).state;
+      float guestbedhum = id(guestbed_hum).state;
+
+      float alstudiotemp = id(alstudio_temp).state;
+      float alstudiohum = id(alstudio_hum).state;
+
+      float lgstudiotemp = id(lgstudio_temp).state;
+      float lgstudiohum = id(lgstudio_hum).state;
+
+      float attictemp = id(attic_temp).state;
+      float attichum = id(attic_hum).state;
+
+      float servertemp = id(server_temp).state;
+      float serverhum = id(server_hum).state;
+
+      int Ycenter = 240;
+      int jawY = 720;
+      int enwY = 365;
+      int grid_thick = 2;
+
+      //Linee Verticali
+      //it.line(Ycenter, 20, Ycenter, 150);
+      //it.line(Ycenter, 390, Ycenter, 530);
+      //Linee Orizzontali
+      //it.line(20, 270, 120, 270);
+      //it.line(360, 270, 460, 270);
+
+      it.circle(Ycenter, 730, 50);
+
+ 
+      //low separator
+      it.filled_rectangle(40, 660, 400, 3);
+
+      //Date
+      it.strftime(100, 710 , id(font_date), TextAlign::CENTER, "%B %d", id(homeassistant_time).now());
+      it.strftime(100, 760 , id(font_date), TextAlign::CENTER, "%A", id(homeassistant_time).now());
+
+
+      //ora
+      it.strftime(378, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
       
-      float mytemp = id(my_temp).state;
-      float mykitchtemp = id(my_kitchen_temp).state;
-      
-      //it.printf(7, 60, id(font_regular_75), TextAlign::BASELINE_LEFT, "It can’t rain all the time");
 
-      it.printf(7, 75, id(font_regular_75), TextAlign::BASELINE_LEFT , "Rack Temp is %.1f°C", mytemp);
-      it.printf(7, 195, id(font_regular_75), TextAlign::BASELINE_LEFT , "Kitchen Temp is %.1f°C", mykitchtemp);  
+      auto time_now = id(homeassistant_time).now().day_of_week;
+        if (id(homeassistant_time).now().day_of_week == 1){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "日");
+        }      
+        if (id(homeassistant_time).now().day_of_week == 2){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "月");
+        }
+        if (id(homeassistant_time).now().day_of_week == 3){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "火");
+        }      
+        if (id(homeassistant_time).now().day_of_week == 4){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "水");
+        }
+        if (id(homeassistant_time).now().day_of_week == 5){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "木");
+        }      
+        if (id(homeassistant_time).now().day_of_week == 6){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "金");
+        }
+        if (id(homeassistant_time).now().day_of_week == 7){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "土");
+        }
+                        
 
-      //it.line(1, 200, 650, 200);
-      it.filled_rectangle(1, 220, 200, 15);
 
-      it.printf(7, 244, id(font_regular), "Gym Door is: %s", id(gym_door).state ? "Open" : "Close");
-      it.printf(7, 265, id(font_regular), "Server Door is: %s", id(server_door).state ? "Open" : "Close");
-      it.printf(7, 295, id(font_regular), "Main Door is: %s", id(main_door).state ? "Open" : "Close");
-
-      it.line(1, 340, 500, 340);
+      it.printf(Ycenter, 480, id(font_regular), TextAlign::CENTER , "Temp is %.1f°C and Hum is %.2f%%", kitchtemp, kitchhum);
 
 
+      //Living Room
+      it.printf(Ycenter, 540, id(icon_font_30), TextAlign::CENTER , "󰇥");
+      it.printf(Ycenter, 580, id(font_regular), TextAlign::CENTER , "T %.1f°C", livingroomtemp);
+      it.printf(Ycenter, 610, id(font_regular), TextAlign::CENTER , "H %.2f%%", livingroomhum);
 
-      it.strftime(7, 370 , id(font_medium_28), TextAlign::BASELINE_LEFT , "Updated at %d/%b/%Y %H:%M", id(homeassistant_time).now());
+      //GRID
+      it.filled_rectangle(0, 0, 480, grid_thick);
+      it.filled_rectangle(0, 200, 480, grid_thick);
+      it.filled_rectangle(0, 400, 480, grid_thick);
 
-      it.printf(0, 430, id(icon_font_30), TextAlign::BASELINE_LEFT, "󰇥 󰒋 󰔏");
+      it.filled_rectangle(0, 0, grid_thick, 400);  
+      it.filled_rectangle(120, 0, grid_thick, 400);
+      it.filled_rectangle(Ycenter, 0, grid_thick, 400);
+      it.filled_rectangle(360, 0, grid_thick, 400);      
+      it.filled_rectangle(477, 0, grid_thick, 400);        
