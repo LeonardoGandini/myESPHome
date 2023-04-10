@@ -43,15 +43,25 @@ font:
     size: 35
 
   - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: icon_font_30
-    size: 30
+    id: icon_font
+    size: 65
     glyphs: [
-      "", # mdi-thermometer
-      "", # mdi-water-percent
-      "ﴟ", # mdi-air-filter
-      "󰒋", #server
-      "󰔏", #temp
-      "󰇥" #duck
+      "󰿑", # master bedroom
+      "󰇦", # gym
+      "󱄫", # attic
+      "󰒍", # server
+      "󱕭", # living room
+      "󱠝", # kitchen
+      "󰌢", # lg studio
+      "󰪫" # al studio
+      ]
+
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: icon_font_small
+    size: 25
+    glyphs: [
+      "󱃃", # temperature
+      "󰖎" # humidity
       ]
 
   - file: 'fonts/Itim-Regular.ttf'
@@ -63,7 +73,7 @@ font:
 
   - file: 'fonts/KleeOne-SemiBold.ttf'
     id: jaweekfont
-    size: 80
+    size: 70
     glyphs:
       ['月','火','水','木','金','土','日']    
 
@@ -260,14 +270,51 @@ display:
         }
                         
 
+      //it.printf(Ycenter, 480, id(font_regular), TextAlign::CENTER , "Temp is %.1f°C and Hum is %.2f%%", kitchtemp, kitchhum);
+      
+      int gridV1 = 60;
+      int gridV2 = 180;
+      int gridV3 = 300;
+      int gridV4 = 420;
 
-      it.printf(Ycenter, 480, id(font_regular), TextAlign::CENTER , "Temp is %.1f°C and Hum is %.2f%%", kitchtemp, kitchhum);
-
+      int gridH1 = 50;
+      int gridH2 = 250;      
 
       //Living Room
-      it.printf(Ycenter, 540, id(icon_font_30), TextAlign::CENTER , "󰇥");
-      it.printf(Ycenter, 580, id(font_regular), TextAlign::CENTER , "T %.1f°C", livingroomtemp);
-      it.printf(Ycenter, 610, id(font_regular), TextAlign::CENTER , "H %.2f%%", livingroomhum);
+      it.printf(gridV1, gridH1, id(icon_font), TextAlign::CENTER , "󱕭");
+      //it.printf(gridV1, 90, id(font_regular), TextAlign::CENTER , "T %.1f°C", livingroomtemp);
+      //it.printf(gridV1, 120, id(font_regular), TextAlign::CENTER , "H %.2f%%", livingroomhum);
+
+      //Gym
+      it.printf(gridV2, gridH1, id(icon_font), TextAlign::CENTER , "󰇦");
+      it.printf(gridV2, gridH1 + 10, id(icon_font_small), TextAlign::CENTER , "󱃃");
+      it.printf(gridV2, 130, id(icon_font_small), TextAlign::CENTER , "󰖎");
+
+      //Kitchen
+      it.printf(gridV3, gridH1, id(icon_font), TextAlign::CENTER , "󱠝");
+
+      //Master Bedroom
+      it.printf(gridV4, gridH1, id(icon_font), TextAlign::CENTER , "󰿑");
+
+
+
+
+      //Attic
+      it.printf(gridV1, gridH2, id(icon_font), TextAlign::CENTER , "󱄫");
+
+
+      //Server
+      it.printf(gridV2, gridH2, id(icon_font), TextAlign::CENTER , "󰒍");
+
+
+      //LG studio
+      it.printf(gridV3, gridH2, id(icon_font), TextAlign::CENTER , "󰌢");
+
+
+      //AL Studio
+      it.printf(gridV4, gridH2, id(icon_font), TextAlign::CENTER , "󰪫");
+
+
 
       //GRID
       it.filled_rectangle(0, 0, 480, grid_thick);
