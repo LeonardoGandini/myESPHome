@@ -26,7 +26,18 @@ ota:
 font:
   - file: 'fonts/Roboto-Regular.ttf'
     id: font_regular
-    size: 25
+    size: 28
+    glyphs:
+      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
+       '1', '2', '3', '4', '5', '6', '7', '8', '9']      
+
+  - file: 'fonts/Roboto-Bold.ttf'
+    id: font_bold
+    size: 28
+    glyphs:
+      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
+       '1', '2', '3', '4', '5', '6', '7', '8', '9','C']      
+
   - file: 'fonts/Roboto-Regular.ttf'
     id: font_regular_75
     size: 75
@@ -46,22 +57,22 @@ font:
     id: icon_font
     size: 65
     glyphs: [
-      "󰿑", # master bedroom
-      "󰇦", # gym
-      "󱄫", # attic
-      "󰒍", # server
-      "󱕭", # living room
-      "󱠝", # kitchen
-      "󰌢", # lg studio
-      "󰪫" # al studio
+      "\U000F156D", # living room
+      "\U000F01E6", # gym
+      "\U000F181D", # kitchen
+      "\U000F0FD1", # mastbed
+      "\U000F112B", # attiv
+      "\U000F1087", # server
+      "\U000F0322", # lg studio
+      "\U000F0AAB" # al studio
       ]
 
   - file: 'fonts/materialdesignicons-webfont.ttf'
     id: icon_font_small
     size: 25
     glyphs: [
-      "󱃃", # temperature
-      "󰖎" # humidity
+      "\U000F050F", # temperature
+      "\U000F058E" # humidity
       ]
 
   - file: 'fonts/Itim-Regular.ttf'
@@ -76,7 +87,6 @@ font:
     size: 70
     glyphs:
       ['月','火','水','木','金','土','日']    
-
 
 wifi:
   ssid: !secret wifi_ssid
@@ -195,44 +205,129 @@ display:
     lambda: |-
       ESP_LOGI("display", "Updating...");
 
-      float kitchtemp = id(kitchen_temp).state;
-      float kitchhum = id(kitchen_hum).state;
-
       float livingroomtemp = id(livingroom_temp).state;
       float livingroomhum = id(livingroom_hum).state;
-
-      float mastbedtemp = id(mastbed_temp).state;
-      float mastbedhum = id(mastbed_hum).state;
-
       float guestbedtemp = id(guestbed_temp).state;
       float guestbedhum = id(guestbed_hum).state;
-
+      float kitchtemp = id(kitchen_temp).state;
+      float kitchhum = id(kitchen_hum).state;
+      float mastbedtemp = id(mastbed_temp).state;
+      float mastbedhum = id(mastbed_hum).state;
+      float attictemp = id(attic_temp).state;
+      float attichum = id(attic_hum).state;
+      float servertemp = id(server_temp).state;
+      float serverhum = id(server_hum).state;
+      float lgstudiotemp = id(lgstudio_temp).state;
+      float lgstudiohum = id(lgstudio_hum).state;
       float alstudiotemp = id(alstudio_temp).state;
       float alstudiohum = id(alstudio_hum).state;
 
-      float lgstudiotemp = id(lgstudio_temp).state;
-      float lgstudiohum = id(lgstudio_hum).state;
+      std::string icolivingroom = "\U000F156D";
+      std::string icoguestbed = "\U000F01E6";
+      std::string icokitch = "\U000F181D";
+      std::string icomastbed = "\U000F0FD1";
+      std::string icoattic = "\U000F112B";
+      std::string icoserver = "\U000F1087";      
+      std::string icolgstudio = "\U000F0322";
+      std::string icoalstudio = "\U000F0AAB";
 
-      float attictemp = id(attic_temp).state;
-      float attichum = id(attic_hum).state;
-
-      float servertemp = id(server_temp).state;
-      float serverhum = id(server_hum).state;
+      std::string icotemp = "\U000F050F";
+      std::string icohum = "\U000F058E";
 
       int Ycenter = 240;
-      int jawY = 720;
+      int jawY = 725;
       int enwY = 365;
       int grid_thick = 2;
 
-      //Linee Verticali
-      //it.line(Ycenter, 20, Ycenter, 150);
-      //it.line(Ycenter, 390, Ycenter, 530);
-      //Linee Orizzontali
-      //it.line(20, 270, 120, 270);
-      //it.line(360, 270, 460, 270);
+      int gridV1 = 60;
+      int gridV2 = 180;
+      int gridV3 = 300;
+      int gridV4 = 420;
+
+      int gridH1 = 40;
+      int gridH2 = 240;
+
+      int temp_ico_h1 = 90;
+      int temp_txt_h1 = 120; 
+      int hum_ico_h1 = 150;
+      int hum_txt_h1 = 180;
+
+      int temp_ico_h2 = 290;
+      int temp_txt_h2 = 320;
+      int hum_ico_h2 = 350;
+      int hum_txt_h2 = 380;
+
+
+      //GRID
+      it.filled_rectangle(0, 0, 480, grid_thick);
+      it.filled_rectangle(0, 200, 480, grid_thick);
+      it.filled_rectangle(0, 400, 480, grid_thick);
+
+      it.filled_rectangle(0, 0, grid_thick, 400);  
+      it.filled_rectangle(120, 0, grid_thick, 400);
+      it.filled_rectangle(Ycenter, 0, grid_thick, 400);
+      it.filled_rectangle(360, 0, grid_thick, 400);      
+      it.filled_rectangle(477, 0, grid_thick, 400);        
+
+
+      //Living Room
+      it.printf(gridV1, gridH1, id(icon_font), TextAlign::CENTER , icolivingroom.c_str());
+      it.printf(gridV1, temp_ico_h1, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV1, temp_txt_h1, id(font_bold), TextAlign::CENTER , "%.1f°C", livingroomtemp);
+      it.printf(gridV1, hum_ico_h1, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV1, hum_txt_h1, id(font_regular), TextAlign::CENTER , "%.1f%%", livingroomhum);
+
+      //Gym
+      it.printf(gridV2, gridH1, id(icon_font), TextAlign::CENTER , icoguestbed.c_str());
+      it.printf(gridV2, temp_ico_h1, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV2, temp_txt_h1, id(font_bold), TextAlign::CENTER , "%.1f°C", guestbedtemp);
+      it.printf(gridV2, hum_ico_h1, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV2, hum_txt_h1, id(font_regular), TextAlign::CENTER , "%.1f%%", guestbedhum);
+
+      //Kitchen
+      it.printf(gridV3, gridH1, id(icon_font), TextAlign::CENTER , icokitch.c_str());
+      it.printf(gridV3, temp_ico_h1, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV3, temp_txt_h1, id(font_bold), TextAlign::CENTER , "%.1f°C", kitchtemp);
+      it.printf(gridV3, hum_ico_h1, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV3, hum_txt_h1, id(font_regular), TextAlign::CENTER , "%.1f%%", kitchhum);      
+
+      //Master Bedroom
+      it.printf(gridV4, gridH1, id(icon_font), TextAlign::CENTER , icomastbed.c_str());
+      it.printf(gridV4, temp_ico_h1, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV4, temp_txt_h1, id(font_bold), TextAlign::CENTER , "%.1f°C", mastbedtemp);      
+      it.printf(gridV4, hum_ico_h1, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV4, hum_txt_h1, id(font_regular), TextAlign::CENTER , "%.1f%%", mastbedhum);
+
+      //Attic
+      it.printf(gridV1, gridH2, id(icon_font), TextAlign::CENTER , icoattic.c_str());
+      it.printf(gridV1, temp_ico_h2, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV1, temp_txt_h2, id(font_bold), TextAlign::CENTER , "%.1f°C", attictemp);
+      it.printf(gridV1, hum_ico_h2, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV1, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", attichum);
+
+      //Server
+      it.printf(gridV2, gridH2, id(icon_font), TextAlign::CENTER , icoserver.c_str());
+      it.printf(gridV2, temp_ico_h2, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV2, temp_txt_h2, id(font_bold), TextAlign::CENTER , "%.1f°C", servertemp);
+      it.printf(gridV2, hum_ico_h2, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV2, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", serverhum);
+
+      //LG studio
+      it.printf(gridV3, gridH2, id(icon_font), TextAlign::CENTER , icolgstudio.c_str());
+      it.printf(gridV3, temp_ico_h2, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV3, temp_txt_h2, id(font_bold), TextAlign::CENTER , "%.1f°C", lgstudiotemp);  
+      it.printf(gridV3, hum_ico_h2, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV3, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", lgstudiohum);
+
+      //AL Studio
+      it.printf(gridV4, gridH2, id(icon_font), TextAlign::CENTER , icoalstudio.c_str());
+      it.printf(gridV4, temp_ico_h2, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV4, temp_txt_h2, id(font_bold), TextAlign::CENTER , "%.1f°C", alstudiotemp);
+      it.printf(gridV4, hum_ico_h2, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV4, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", alstudiohum);
+
 
       it.circle(Ycenter, 730, 50);
-
  
       //low separator
       it.filled_rectangle(40, 660, 400, 3);
@@ -268,61 +363,4 @@ display:
         if (id(homeassistant_time).now().day_of_week == 7){ 
           it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "土");
         }
-                        
-
-      //it.printf(Ycenter, 480, id(font_regular), TextAlign::CENTER , "Temp is %.1f°C and Hum is %.2f%%", kitchtemp, kitchhum);
-      
-      int gridV1 = 60;
-      int gridV2 = 180;
-      int gridV3 = 300;
-      int gridV4 = 420;
-
-      int gridH1 = 50;
-      int gridH2 = 250;      
-
-      //Living Room
-      it.printf(gridV1, gridH1, id(icon_font), TextAlign::CENTER , "󱕭");
-      //it.printf(gridV1, 90, id(font_regular), TextAlign::CENTER , "T %.1f°C", livingroomtemp);
-      //it.printf(gridV1, 120, id(font_regular), TextAlign::CENTER , "H %.2f%%", livingroomhum);
-
-      //Gym
-      it.printf(gridV2, gridH1, id(icon_font), TextAlign::CENTER , "󰇦");
-      it.printf(gridV2, gridH1 + 10, id(icon_font_small), TextAlign::CENTER , "󱃃");
-      it.printf(gridV2, 130, id(icon_font_small), TextAlign::CENTER , "󰖎");
-
-      //Kitchen
-      it.printf(gridV3, gridH1, id(icon_font), TextAlign::CENTER , "󱠝");
-
-      //Master Bedroom
-      it.printf(gridV4, gridH1, id(icon_font), TextAlign::CENTER , "󰿑");
-
-
-
-
-      //Attic
-      it.printf(gridV1, gridH2, id(icon_font), TextAlign::CENTER , "󱄫");
-
-
-      //Server
-      it.printf(gridV2, gridH2, id(icon_font), TextAlign::CENTER , "󰒍");
-
-
-      //LG studio
-      it.printf(gridV3, gridH2, id(icon_font), TextAlign::CENTER , "󰌢");
-
-
-      //AL Studio
-      it.printf(gridV4, gridH2, id(icon_font), TextAlign::CENTER , "󰪫");
-
-
-
-      //GRID
-      it.filled_rectangle(0, 0, 480, grid_thick);
-      it.filled_rectangle(0, 200, 480, grid_thick);
-      it.filled_rectangle(0, 400, 480, grid_thick);
-
-      it.filled_rectangle(0, 0, grid_thick, 400);  
-      it.filled_rectangle(120, 0, grid_thick, 400);
-      it.filled_rectangle(Ycenter, 0, grid_thick, 400);
-      it.filled_rectangle(360, 0, grid_thick, 400);      
-      it.filled_rectangle(477, 0, grid_thick, 400);        
+            
