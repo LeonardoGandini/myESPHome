@@ -306,7 +306,7 @@ display:
       it.printf(gridV1, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", attichum);
 
       //Server
-      it.printf(gridV2, gridH2, id(icon_font), TextAlign::CENTER , icoserver.c_str());
+      it.printf(gridV2, gridH2 - 6, id(icon_font), TextAlign::CENTER , icoserver.c_str());
       it.printf(gridV2, temp_ico_h2, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
       it.printf(gridV2, temp_txt_h2, id(font_bold), TextAlign::CENTER , "%.1f°C", servertemp);
       it.printf(gridV2, hum_ico_h2, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
