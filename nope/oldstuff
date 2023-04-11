@@ -18,10 +18,10 @@ logger:
 # Enable Home Assistant API
 api:
   encryption:
-    key: "runCGvJaVNPxH5nFCPSwxtk61yTmQrFOP2N0UfSJjyk="
+    key: ""
 
 ota:
-  password: "d914193e08e3fb4f1b8b49738565c234"
+  password: ""
   
 font:
   - file: 'fonts/Roboto-Regular.ttf'
