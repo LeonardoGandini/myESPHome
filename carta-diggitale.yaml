@@ -15,13 +15,16 @@ esp32:
 # Enable logging
 logger:
 
-# Enable Home Assistant API
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password    
+
 api:
   encryption:
-    key: "runCGvJaVNPxH5nFCPSwxtk61yTmQrFOP2N0UfSJjyk="
+    key: !secret ha_api
 
 ota:
-  password: "d914193e08e3fb4f1b8b49738565c234"
+  password: !secret ota
 
 font:
   - file: 'fonts/Roboto-Regular.ttf'
@@ -87,10 +90,6 @@ font:
     size: 70
     glyphs:
       ['月','火','水','木','金','土','日']    
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password    
 
 spi:
   clk_pin: GPIO13
