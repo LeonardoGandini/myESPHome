@@ -155,7 +155,6 @@ sensor:
     entity_id: sensor.lg_studio_humidity
     id: lgstudio_hum  
 
-
   # Attic
   - platform: homeassistant
     entity_id: sensor.zigbee_21602_1_1_temperature
@@ -171,9 +170,6 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.server_hum_relative_humidity
     id: server_hum
-
-
-
 
 binary_sensor:
   - platform: homeassistant
@@ -326,20 +322,21 @@ display:
       it.printf(gridV4, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", alstudiohum);
 
 
-      it.circle(Ycenter, 730, 50);
  
-      //low separator
+      //Lower Separator
       it.filled_rectangle(40, 660, 400, 3);
 
       //Date
       it.strftime(100, 710 , id(font_date), TextAlign::CENTER, "%B %d", id(homeassistant_time).now());
       it.strftime(100, 760 , id(font_date), TextAlign::CENTER, "%A", id(homeassistant_time).now());
 
-
-      //ora
+      //Time
       it.strftime(378, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
-      
 
+      //丸曜日
+      it.circle(Ycenter, 730, 50);
+
+      //何曜日？
       auto time_now = id(homeassistant_time).now().day_of_week;
         if (id(homeassistant_time).now().day_of_week == 1){ 
           it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "日");
