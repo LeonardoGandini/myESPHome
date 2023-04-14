@@ -30,16 +30,16 @@ font:
   - file: 'fonts/Roboto-Regular.ttf'
     id: font_regular
     size: 28
-    glyphs:
-      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
-       '1', '2', '3', '4', '5', '6', '7', '8', '9']      
+    #glyphs:
+    #  ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
+    #   '1', '2', '3', '4', '5', '6', '7', '8', '9']      
 
   - file: 'fonts/Roboto-Bold.ttf'
     id: font_bold
     size: 28
-    glyphs:
-      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
-       '1', '2', '3', '4', '5', '6', '7', '8', '9','C']      
+    #glyphs:
+    #  ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
+    #   '1', '2', '3', '4', '5', '6', '7', '8', '9','C','k','m','h','/']      
 
   - file: 'fonts/Roboto-Regular.ttf'
     id: font_regular_75
@@ -68,6 +68,29 @@ font:
       "\U000F1087", # server
       "\U000F0322", # lg studio
       "\U000F0AAB" # al studio
+      ]
+
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: weather_font_85
+    size: 85
+    glyphs: [
+      # Weather
+      "\U000F0590", # mdi-weather-cloudy
+      "\U000F0594", # mdi-weather-night
+      "\U000F0591", # mdi-weather-fog
+      "\U000F0592", # mdi-weather-hail
+      "\U000F0593", # mdi-weather-lightning
+      "\U000F067E", # mdi-weather-lightning-rainy
+      "\U000F0595", # mdi-weather-partly-cloudy
+      "\U000F0596", # mdi-weather-pouring
+      "\U000F0597", # mdi-weather-rainy
+      "\U000F0598", # mdi-weather-snowy
+      "\U000F067F", # mdi-weather-snowy-rainy
+      "\U000F0599", # mdi-weather-sunny
+      "\U000F059B", # mdi-weather-sunset-down
+      "\U000F059C", # mdi-weather-sunset-up
+      "\U000F059D", # mdi-weather-windy
+      "\U000F059E", # mdi-weather-windy-variant
       ]
 
   - file: 'fonts/materialdesignicons-webfont.ttf'
@@ -171,6 +194,14 @@ sensor:
     entity_id: sensor.server_hum_relative_humidity
     id: server_hum
 
+  - platform: homeassistant
+    entity_id: sensor.grange_wind
+    id: windnow
+
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_temperature
+    id: tempnow
+
 binary_sensor:
   - platform: homeassistant
     entity_id: binary_sensor.contact_sensor_3
@@ -184,6 +215,11 @@ binary_sensor:
     entity_id: binary_sensor.contact_sensor_2
     id: main_door
     device_class: door
+
+text_sensor:
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_condition
+    id: weathernow
 
 display:
   - platform: waveshare_epaper
@@ -217,6 +253,9 @@ display:
       float alstudiotemp = id(alstudio_temp).state;
       float alstudiohum = id(alstudio_hum).state;
 
+      float wind_now = id(windnow).state;
+      float temp_now = id(tempnow).state;
+
       std::string icolivingroom = "\U000F156D";
       std::string icoguestbed = "\U000F01E6";
       std::string icokitch = "\U000F181D";
@@ -228,6 +267,26 @@ display:
 
       std::string icotemp = "\U000F050F";
       std::string icohum = "\U000F058E";
+
+      std::map<std::string, std::string> weather_icon_state {
+          {"cloudy", "\U000F0590"},
+          {"clear-day", "\U000F0599"},
+          {"clear-night", "\U000F0594"},
+          {"fog", "\U000F0591"},
+          {"hail", "\U000F0592"},
+          {"lightning", "\U000F0593"},
+          {"lightning-rainy", "\U000F067E"},
+          {"partlycloudy", "\U000F0595"},
+          {"pouring", "\U000F0596"},
+          {"rainy", "\U000F0597"},
+          {"snowy", "\U000F0598"},
+          {"snowy-rainy", "\U000F067F"},
+          {"sunny", "\U000F0599"},
+          {"sunset-down", "\U000F059B"},
+          {"sunset-up", "\U000F059C"},
+          {"windy", "\U000F059D"},
+          {"windy-variant", "\U000F059E"}
+      };
 
       int Ycenter = 240;
       int jawY = 725;
@@ -321,7 +380,13 @@ display:
       it.printf(gridV4, hum_ico_h2, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
       it.printf(gridV4, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", alstudiohum);
 
+      std::string weather_now = id(weathernow).state;
 
+      it.printf(Ycenter, 610 , id(font_bold), TextAlign::CENTER, "wind %.1f kmh", wind_now);
+      //it.printf(Ycenter, 550 , id(font_bold), TextAlign::CENTER, "%s", weather_now.c_str());
+
+      it.printf(Ycenter, 480, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weather_now.c_str()].c_str());          
+      it.printf(Ycenter, 560 , id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
  
       //Lower Separator
       it.filled_rectangle(40, 660, 400, 3);
@@ -359,4 +424,3 @@ display:
         if (id(homeassistant_time).now().day_of_week == 7){ 
           it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "土");
         }
-            
