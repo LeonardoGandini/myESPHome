@@ -268,6 +268,8 @@ display:
       std::string icotemp = "\U000F050F";
       std::string icohum = "\U000F058E";
 
+      std::string weather_now = id(weathernow).state;
+
       std::map<std::string, std::string> weather_icon_state {
           {"cloudy", "\U000F0590"},
           {"clear-day", "\U000F0599"},
@@ -380,14 +382,15 @@ display:
       it.printf(gridV4, hum_ico_h2, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
       it.printf(gridV4, hum_txt_h2, id(font_regular), TextAlign::CENTER , "%.1f%%", alstudiohum);
 
-      std::string weather_now = id(weathernow).state;
-
-      it.printf(Ycenter, 610 , id(font_bold), TextAlign::CENTER, "wind %.1f kmh", wind_now);
-      //it.printf(Ycenter, 550 , id(font_bold), TextAlign::CENTER, "%s", weather_now.c_str());
-
+      
+      //weather
       it.printf(Ycenter, 480, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weather_now.c_str()].c_str());          
       it.printf(Ycenter, 560 , id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
- 
+      //it.printf(Ycenter, 550 , id(font_bold), TextAlign::CENTER, "%s", weather_now.c_str());
+      
+      it.printf(Ycenter, 610 , id(font_bold), TextAlign::CENTER, "wind %.1f kmh", wind_now);
+      
+
       //Lower Separator
       it.filled_rectangle(40, 660, 400, 3);
 
