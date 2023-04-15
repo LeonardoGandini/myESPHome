@@ -90,7 +90,12 @@ font:
       "\U000F050F", # temperature
       "\U000F058E" # humidity
       ]
-
+  - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: icon_font_storm
+    size: 30
+    glyphs: [
+      "\U000F067E" # storm
+      ]
   - file: 'fonts/Itim-Regular.ttf'
     id: clockfont
     size: 64

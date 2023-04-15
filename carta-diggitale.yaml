@@ -6,13 +6,11 @@ esphome:
     then:
       - delay: 10s
       - component.update: epaper  
-
 esp32:
   board: esp32dev
   framework:
     type: arduino
 
-# Enable logging
 logger:
 
 wifi:
@@ -35,28 +33,6 @@ time:
   - platform: homeassistant
     id: homeassistant_time
     timezone: Europe/London
-    on_time:
-      # Every 1 minutes
-      - seconds: 0
-        then:
-          - component.update: epaper
-
-<<: !include .sensors.yaml
-<<: !include .fonts.yaml
-
-binary_sensor:
-  - platform: homeassistant
-    entity_id: binary_sensor.contact_sensor_3
-    id: gym_door
-    device_class: door
-  - platform: homeassistant
-    entity_id: binary_sensor.server_door
-    id: server_door
-    device_class: door
-  - platform: homeassistant
-    entity_id: binary_sensor.contact_sensor_2
-    id: main_door
-    device_class: door
 
 sun:
   latitude: !secret my_lat
@@ -64,26 +40,9 @@ sun:
 
 json:
 
-text_sensor:
-  - platform: homeassistant
-    entity_id: weather.grange_2
-    id: weathernow
+<<: !include .sensors.yaml
+<<: !include .fonts.yaml
 
-  - platform: homeassistant
-    entity_id: weather.grange_2
-    attribute: forecast
-    id: accuweatherfore
-    internal: yes
-
-  - platform: sun
-    type: sunrise
-    format: "%H:%M"
-    id: sunrise_hour
-  - platform: sun
-    type: sunset
-    format: "%H:%M"
-    id: sunset_hour
-  
 display:
   - platform: waveshare_epaper
     id: epaper  
@@ -93,8 +52,8 @@ display:
     reset_pin: GPIO26
     model: 7.50inV2alt
     rotation: 90
-    update_interval: 12min
-    #reset_duration: 2ms
+    update_interval: 5min
+    reset_duration: 4ms
 
     lambda: |-
       ESP_LOGI("display", "Updating...");
@@ -119,6 +78,10 @@ display:
       float wind_now = id(windnow).state;
       float temp_now = id(tempnow).state;
 
+      float storm_d0 = id(stormd0).state;
+      float storm_d1 = id(stormd1).state;
+      float storm_d2 = id(stormd2).state;
+
       std::string icolivingroom = "\U000F156D";
       std::string icoguestbed = "\U000F01E6";
       std::string icokitch = "\U000F181D";
@@ -138,6 +101,8 @@ display:
       std::string sunrise = id(sunrise_hour).state;
       std::string sunset = id(sunset_hour).state;
 
+      std::string icostorm = "\U000F067E";
+      
       std::map<std::string, std::string> weather_icon_state {
           {"cloudy", "\U000F0590"},
           {"clear-day", "\U000F0599"},
@@ -281,11 +246,10 @@ display:
       float root_1_templow = root_1["templow"];
       float root_2_templow = root_2["templow"];
 
-      //std::string accufore = id(accuweatherfore).state;
-
+      
       //Day0
       it.printf(80, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_0_condition.c_str()].c_str());          
-      it.printf(80, weath_txt1 , id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
+      it.printf(80, weath_txt1 - 5, id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
     
       it.printf(80, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
       it.printf(80, weath_txt2 , id(font_bold), TextAlign::CENTER, "%.1f kmh", wind_now);
@@ -320,15 +284,36 @@ display:
 
       it.printf(330, 770, id(sun_font), TextAlign::CENTER , icosundown.c_str());
       it.printf(400, 765, id(font_date), TextAlign::CENTER, "%s", sunset.c_str());
-      
+
+      //Storm
+      if (storm_d0 >= 15){
+        it.filled_rectangle(20, weath_ico2 - 65, 125, 40, COLOR_ON);
+        it.printf(50, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
+        it.printf(100, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d0);
+      }
+      if (storm_d1 >= 15){
+        it.filled_rectangle(180, weath_ico2 - 65, 125, 40, COLOR_ON);
+        it.printf(210, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
+        it.printf(260, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d1);      
+      }
+      if (storm_d2 >= 15){
+        it.filled_rectangle(340, weath_ico2 - 65, 125, 40, COLOR_ON);
+        it.printf(370, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
+        it.printf(420, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d2);     
+      }  
 
       //丸曜日
-      it.circle(Ycenter, 730, 50);
-
+      //it.filled_circle(Ycenter, 730, 50);
+      if (id(homeassistant_time).now().day_of_week == 1 || id(homeassistant_time).now().day_of_week == 7){ 
+        it.filled_circle(Ycenter, 730, 50);
+      }
+      else{
+        it.circle(Ycenter, 730, 50);
+      }
       //何曜日？
       auto time_now = id(homeassistant_time).now().day_of_week;
         if (id(homeassistant_time).now().day_of_week == 1){ 
-          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "日");
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_OFF, TextAlign::CENTER, "日");
         }      
         if (id(homeassistant_time).now().day_of_week == 2){ 
           it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "月");
@@ -346,5 +331,6 @@ display:
           it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "金");
         }
         if (id(homeassistant_time).now().day_of_week == 7){ 
-          it.printf(Ycenter, jawY, id(jaweekfont), TextAlign::CENTER, "土");
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_OFF, TextAlign::CENTER, "土");
         }
+
