@@ -26,94 +26,6 @@ api:
 ota:
   password: !secret ota
 
-font:
-  - file: 'fonts/Roboto-Regular.ttf'
-    id: font_regular
-    size: 28
-    #glyphs:
-    #  ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
-    #   '1', '2', '3', '4', '5', '6', '7', '8', '9']      
-
-  - file: 'fonts/Roboto-Bold.ttf'
-    id: font_bold
-    size: 28
-    #glyphs:
-    #  ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
-    #   '1', '2', '3', '4', '5', '6', '7', '8', '9','C','k','m','h','/']      
-
-  - file: 'fonts/Roboto-Regular.ttf'
-    id: font_regular_75
-    size: 75
-    glyphs:
-      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
-       '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
-       'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-       'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
-       'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-       'u', 'v', 'w', 'x', 'y', 'z','å', 'ä', 'ö', '/','º','µ','³']    
-    
-  - file: 'fonts/Itim-Regular.ttf'
-    id: font_date
-    size: 35
-
-  - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: icon_font
-    size: 65
-    glyphs: [
-      "\U000F156D", # living room
-      "\U000F01E6", # gym
-      "\U000F181D", # kitchen
-      "\U000F0FD1", # mastbed
-      "\U000F112B", # attiv
-      "\U000F1087", # server
-      "\U000F0322", # lg studio
-      "\U000F0AAB" # al studio
-      ]
-
-  - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: weather_font_85
-    size: 85
-    glyphs: [
-      # Weather
-      "\U000F0590", # mdi-weather-cloudy
-      "\U000F0594", # mdi-weather-night
-      "\U000F0591", # mdi-weather-fog
-      "\U000F0592", # mdi-weather-hail
-      "\U000F0593", # mdi-weather-lightning
-      "\U000F067E", # mdi-weather-lightning-rainy
-      "\U000F0595", # mdi-weather-partly-cloudy
-      "\U000F0596", # mdi-weather-pouring
-      "\U000F0597", # mdi-weather-rainy
-      "\U000F0598", # mdi-weather-snowy
-      "\U000F067F", # mdi-weather-snowy-rainy
-      "\U000F0599", # mdi-weather-sunny
-      "\U000F059B", # mdi-weather-sunset-down
-      "\U000F059C", # mdi-weather-sunset-up
-      "\U000F059D", # mdi-weather-windy
-      "\U000F059E", # mdi-weather-windy-variant
-      ]
-
-  - file: 'fonts/materialdesignicons-webfont.ttf'
-    id: icon_font_small
-    size: 25
-    glyphs: [
-      "\U000F050F", # temperature
-      "\U000F058E" # humidity
-      ]
-
-  - file: 'fonts/Itim-Regular.ttf'
-    id: clockfont
-    size: 64
-    glyphs:
-      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
-       '1', '2', '3', '4', '5', '6', '7', '8', '9']  
-
-  - file: 'fonts/KleeOne-SemiBold.ttf'
-    id: jaweekfont
-    size: 70
-    glyphs:
-      ['月','火','水','木','金','土','日']    
-
 spi:
   clk_pin: GPIO13
   mosi_pin: GPIO14
@@ -129,78 +41,8 @@ time:
         then:
           - component.update: epaper
 
-sensor:
-  # Kitchen
-  - platform: homeassistant
-    entity_id: sensor.kitchen_temperature
-    id: kitchen_temp
-  - platform: homeassistant
-    entity_id: sensor.kitchen_humidity
-    id: kitchen_hum
-
-  # Living Room
-  - platform: homeassistant
-    entity_id: sensor.living_room_temperature
-    id: livingroom_temp
-  - platform: homeassistant
-    entity_id: sensor.living_room_humidity
-    id: livingroom_hum    
-
-  # Master Bedroom
-  - platform: homeassistant
-    entity_id: sensor.master_bedroom_temperature
-    id: mastbed_temp
-  - platform: homeassistant
-    entity_id: sensor.master_bedroom_humidity
-    id: mastbed_hum    
-
-  # Guest Bedroom
-  - platform: homeassistant
-    entity_id: sensor.guest_bedroom_temperature
-    id: guestbed_temp
-  - platform: homeassistant
-    entity_id: sensor.guest_bedroom_humidity
-    id: guestbed_hum  
-
-  # AL Studio
-  - platform: homeassistant
-    entity_id: sensor.al_studio_temperature
-    id: alstudio_temp
-  - platform: homeassistant
-    entity_id: sensor.al_studio_humidity
-    id: alstudio_hum  
-
-  # LG Studio
-  - platform: homeassistant
-    entity_id: sensor.lg_studio_temperature
-    id: lgstudio_temp
-  - platform: homeassistant
-    entity_id: sensor.lg_studio_humidity
-    id: lgstudio_hum  
-
-  # Attic
-  - platform: homeassistant
-    entity_id: sensor.zigbee_21602_1_1_temperature
-    id: attic_temp
-  - platform: homeassistant
-    entity_id: sensor.zigbee_21602_1_1_zigbee_21602_1_2_relative_humidity
-    id: attic_hum
-
-  # Server
-  - platform: homeassistant
-    entity_id: sensor.server_temp_temperature
-    id: server_temp
-  - platform: homeassistant
-    entity_id: sensor.server_hum_relative_humidity
-    id: server_hum
-
-  - platform: homeassistant
-    entity_id: sensor.grange_wind
-    id: windnow
-
-  - platform: homeassistant
-    entity_id: sensor.openweathermap_temperature
-    id: tempnow
+<<: !include .sensors.yaml
+<<: !include .fonts.yaml
 
 binary_sensor:
   - platform: homeassistant
@@ -267,6 +109,7 @@ display:
 
       std::string icotemp = "\U000F050F";
       std::string icohum = "\U000F058E";
+      std::string icowind = "\U000F059D";
 
       std::string weather_now = id(weathernow).state;
 
@@ -325,6 +168,8 @@ display:
       it.filled_rectangle(360, 0, grid_thick, 400);      
       it.filled_rectangle(477, 0, grid_thick, 400);        
 
+      it.filled_rectangle(160, 420, grid_thick, 230);
+      it.filled_rectangle(320, 420, grid_thick, 230);
 
       //Living Room
       it.printf(gridV1, gridH1, id(icon_font), TextAlign::CENTER , icolivingroom.c_str());
@@ -384,11 +229,18 @@ display:
 
       
       //weather
-      it.printf(Ycenter, 480, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weather_now.c_str()].c_str());          
-      it.printf(Ycenter, 560 , id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
-      //it.printf(Ycenter, 550 , id(font_bold), TextAlign::CENTER, "%s", weather_now.c_str());
-      
-      it.printf(Ycenter, 610 , id(font_bold), TextAlign::CENTER, "wind %.1f kmh", wind_now);
+      int weath_ico1 = 455;
+      int weath_txt1 = 520;
+      int weath_ico2 = 580;
+      int weath_txt2 = 625;
+
+
+      //Today
+      it.printf(80, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weather_now.c_str()].c_str());          
+      it.printf(80, weath_txt1 , id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
+    
+      it.printf(80, weath_ico2, id(weather_font_55), TextAlign::CENTER, icowind.c_str()); 
+      it.printf(80, weath_txt2 , id(font_bold), TextAlign::CENTER, "%.1f kmh", wind_now);
       
 
       //Lower Separator

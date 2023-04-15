@@ -1,0 +1,77 @@
+sensor:
+  # Kitchen
+  - platform: homeassistant
+    entity_id: sensor.kitchen_temperature
+    id: kitchen_temp
+  - platform: homeassistant
+    entity_id: sensor.kitchen_humidity
+    id: kitchen_hum
+
+  # Living Room
+  - platform: homeassistant
+    entity_id: sensor.living_room_temperature
+    id: livingroom_temp
+  - platform: homeassistant
+    entity_id: sensor.living_room_humidity
+    id: livingroom_hum    
+
+  # Master Bedroom
+  - platform: homeassistant
+    entity_id: sensor.master_bedroom_temperature
+    id: mastbed_temp
+  - platform: homeassistant
+    entity_id: sensor.master_bedroom_humidity
+    id: mastbed_hum    
+
+  # Guest Bedroom
+  - platform: homeassistant
+    entity_id: sensor.guest_bedroom_temperature
+    id: guestbed_temp
+  - platform: homeassistant
+    entity_id: sensor.guest_bedroom_humidity
+    id: guestbed_hum  
+
+  # AL Studio
+  - platform: homeassistant
+    entity_id: sensor.al_studio_temperature
+    id: alstudio_temp
+  - platform: homeassistant
+    entity_id: sensor.al_studio_humidity
+    id: alstudio_hum  
+
+  # LG Studio
+  - platform: homeassistant
+    entity_id: sensor.lg_studio_temperature
+    id: lgstudio_temp
+  - platform: homeassistant
+    entity_id: sensor.lg_studio_humidity
+    id: lgstudio_hum  
+
+  # Attic
+  - platform: homeassistant
+    entity_id: sensor.zigbee_21602_1_1_temperature
+    id: attic_temp
+  - platform: homeassistant
+    entity_id: sensor.zigbee_21602_1_1_zigbee_21602_1_2_relative_humidity
+    id: attic_hum
+
+  # Server
+  - platform: homeassistant
+    entity_id: sensor.server_temp_temperature
+    id: server_temp
+  - platform: homeassistant
+    entity_id: sensor.server_hum_relative_humidity
+    id: server_hum
+
+  - platform: homeassistant
+    entity_id: sensor.grange_wind
+    id: windnow
+
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_temperature
+    id: tempnow
+
+  - platform: homeassistant
+    entity_id: weather.grange_2
+    attribute: forecast
+    id: accuweathertoday
