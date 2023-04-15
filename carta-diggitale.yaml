@@ -58,11 +58,32 @@ binary_sensor:
     id: main_door
     device_class: door
 
+sun:
+  latitude: !secret my_lat
+  longitude: !secret my_long
+
+json:
+
 text_sensor:
   - platform: homeassistant
-    entity_id: sensor.openweathermap_condition
+    entity_id: weather.grange_2
     id: weathernow
 
+  - platform: homeassistant
+    entity_id: weather.grange_2
+    attribute: forecast
+    id: accuweatherfore
+    internal: yes
+
+  - platform: sun
+    type: sunrise
+    format: "%H:%M"
+    id: sunrise_hour
+  - platform: sun
+    type: sunset
+    format: "%H:%M"
+    id: sunset_hour
+  
 display:
   - platform: waveshare_epaper
     id: epaper  
@@ -111,7 +132,11 @@ display:
       std::string icohum = "\U000F058E";
       std::string icowind = "\U000F059D";
 
-      std::string weather_now = id(weathernow).state;
+      std::string icosunup = "\U000F059C";
+      std::string icosundown = "\U000F059B";
+      
+      std::string sunrise = id(sunrise_hour).state;
+      std::string sunset = id(sunset_hour).state;
 
       std::map<std::string, std::string> weather_icon_state {
           {"cloudy", "\U000F0590"},
@@ -231,17 +256,53 @@ display:
       //weather
       int weath_ico1 = 455;
       int weath_txt1 = 520;
-      int weath_ico2 = 580;
-      int weath_txt2 = 625;
+      int weath_ico2 = 600;
+      int weath_txt2 = 635;
+     
+  
+      DynamicJsonDocument doc(2048);
+      deserializeJson(doc, (id(accuweatherfore).state.c_str()));
+      JsonArray root = doc.as<JsonArray>();
 
+      JsonObject root_0 = root[0];
+      JsonObject root_1 = root[1];
+      JsonObject root_2 = root[2];
+      std::string root_0_condition = root_0["condition"];
+      std::string root_1_condition = root_1["condition"];
+      std::string root_2_condition = root_2["condition"];
+      float root_0_temperature = root_0["temperature"];
+      float root_1_temperature = root_1["temperature"];
+      float root_2_temperature = root_2["temperature"];
 
-      //Today
-      it.printf(80, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weather_now.c_str()].c_str());          
+      float root_0_wind = root_0["wind_speed"];
+      float root_1_wind = root_1["wind_speed"];
+      float root_2_wind = root_2["wind_speed"];
+
+      float root_1_templow = root_1["templow"];
+      float root_2_templow = root_2["templow"];
+
+      //std::string accufore = id(accuweatherfore).state;
+
+      //Day0
+      it.printf(80, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_0_condition.c_str()].c_str());          
       it.printf(80, weath_txt1 , id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
     
-      it.printf(80, weath_ico2, id(weather_font_55), TextAlign::CENTER, icowind.c_str()); 
+      it.printf(80, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
       it.printf(80, weath_txt2 , id(font_bold), TextAlign::CENTER, "%.1f kmh", wind_now);
+
+      //Day1
+      it.printf(240, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_1_condition.c_str()].c_str());
+      it.printf(240, weath_ico1+60, id(font_bold), TextAlign::CENTER, "%.0f° - %.0f°", root_1_templow, root_1_temperature);
+
+      it.printf(240, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_1_wind);
+      it.printf(240, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
       
+      //Day 2
+      it.printf(400, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_2_condition.c_str()].c_str());
+      it.printf(400, weath_ico1+60, id(font_bold), TextAlign::CENTER, "%.0f° - %.0f°", root_2_templow, root_2_temperature);
+
+      it.printf(400, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str());
+      it.printf(400, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_2_wind);
 
       //Lower Separator
       it.filled_rectangle(40, 660, 400, 3);
@@ -251,7 +312,15 @@ display:
       it.strftime(100, 760 , id(font_date), TextAlign::CENTER, "%A", id(homeassistant_time).now());
 
       //Time
-      it.strftime(378, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
+      //it.strftime(378, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
+
+      //SUN
+      it.printf(330, 710, id(sun_font), TextAlign::CENTER , icosunup.c_str());
+      it.printf(400, 705, id(font_date), TextAlign::CENTER, "%s", sunrise.c_str());
+
+      it.printf(330, 770, id(sun_font), TextAlign::CENTER , icosundown.c_str());
+      it.printf(400, 765, id(font_date), TextAlign::CENTER, "%s", sunset.c_str());
+      
 
       //丸曜日
       it.circle(Ycenter, 730, 50);

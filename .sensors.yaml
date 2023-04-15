@@ -72,6 +72,9 @@ sensor:
     id: tempnow
 
   - platform: homeassistant
-    entity_id: weather.grange_2
-    attribute: forecast
-    id: accuweathertoday
+    entity_id: sensor.sun_next_rising
+    id: sunrising
+
+  - platform: homeassistant
+    entity_id: sensor.sun_next_setting
+    id: sunsetting
