@@ -1,6 +1,6 @@
 esphome:
   name: carta-diggitale
-  friendly_name: carta diggitale
+  friendly_name: Carta Digitale
   on_boot:
     priority: -10
     then:
@@ -219,11 +219,19 @@ display:
 
       
       //weather
-      int weath_ico1 = 455;
-      int weath_txt1 = 520;
-      int weath_ico2 = 600;
-      int weath_txt2 = 635;
-     
+      int stormvalue = 25;
+
+      int weath_ico1 = 485;
+      int weath_txt1 = 550;
+      int weath_ico2 = 570;
+      int weath_txt2 = 605;
+
+      if (storm_d0 >= stormvalue || storm_d1 >= stormvalue || storm_d2 >= stormvalue){
+        int weath_ico1 = 455;
+        int weath_txt1 = 520;
+        int weath_ico2 = 600;
+        int weath_txt2 = 635;
+      }
   
       DynamicJsonDocument doc(2048);
       deserializeJson(doc, (id(accuweatherfore).state.c_str()));
@@ -286,17 +294,17 @@ display:
       it.printf(400, 765, id(font_date), TextAlign::CENTER, "%s", sunset.c_str());
 
       //Storm
-      if (storm_d0 >= 15){
+      if (storm_d0 >= stormvalue){
         it.filled_rectangle(20, weath_ico2 - 65, 125, 40, COLOR_ON);
         it.printf(50, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
         it.printf(100, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d0);
       }
-      if (storm_d1 >= 15){
+      if (storm_d1 >= stormvalue){
         it.filled_rectangle(180, weath_ico2 - 65, 125, 40, COLOR_ON);
         it.printf(210, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
         it.printf(260, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d1);      
       }
-      if (storm_d2 >= 15){
+      if (storm_d2 >= stormvalue){
         it.filled_rectangle(340, weath_ico2 - 65, 125, 40, COLOR_ON);
         it.printf(370, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
         it.printf(420, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d2);     
