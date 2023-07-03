@@ -17,6 +17,9 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.kitchen_temperature
     id: kitchen_temp
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
     entity_id: sensor.kitchen_humidity
     id: kitchen_hum
@@ -33,6 +36,9 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.master_bedroom_temperature
     id: mastbed_temp
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
     entity_id: sensor.master_bedroom_humidity
     id: mastbed_hum    
@@ -41,6 +47,9 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.guest_bedroom_temperature
     id: guestbed_temp
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
     entity_id: sensor.guest_bedroom_humidity
     id: guestbed_hum  
@@ -57,6 +66,9 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.lg_studio_temperature
     id: lgstudio_temp
+    on_value:
+      then:
+      - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
     entity_id: sensor.lg_studio_humidity
     id: lgstudio_hum  
@@ -65,6 +77,9 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.zigbee_21602_1_1_temperature
     id: attic_temp
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
     entity_id: sensor.zigbee_21602_1_1_zigbee_21602_1_2_relative_humidity
     id: attic_hum
@@ -73,6 +88,9 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.server_temp_temperature
     id: server_temp
+    on_value:
+      then:
+      - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
     entity_id: sensor.server_hum_relative_humidity
     id: server_hum
@@ -84,6 +102,9 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.openweathermap_temperature
     id: tempnow
+    on_value:
+      then:
+        - lambda: 'id(data_updated) = true;'
 
   - platform: homeassistant
     entity_id: sensor.sun_next_rising
@@ -102,6 +123,13 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.grange_thunderstorm_probability_day_2d
     id: stormd2
+
+  # Create sensors for monitoring cartaccia remotely.
+  - platform: template
+    name: "Carta - Display Last Update"
+    device_class: timestamp
+    entity_category: "diagnostic"
+    id: display_last_update    
 
 text_sensor:
   - platform: homeassistant
