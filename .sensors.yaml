@@ -75,24 +75,24 @@ sensor:
 
   # Attic
   - platform: homeassistant
-    entity_id: sensor.zigbee_21602_1_1_temperature
+    entity_id: sensor.temp_attic_temperature
     id: attic_temp
     on_value:
       then:
         - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
-    entity_id: sensor.zigbee_21602_1_1_zigbee_21602_1_2_relative_humidity
+    entity_id: sensor.temp_attic_humidity
     id: attic_hum
 
   # Server
   - platform: homeassistant
-    entity_id: sensor.server_temp_temperature
+    entity_id: sensor.temp_server_temperature
     id: server_temp
     on_value:
       then:
       - lambda: 'id(data_updated) = true;'
   - platform: homeassistant
-    entity_id: sensor.server_hum_relative_humidity
+    entity_id: sensor.temp_server_humidity
     id: server_hum
 
   - platform: homeassistant

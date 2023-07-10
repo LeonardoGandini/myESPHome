@@ -1,11 +1,21 @@
 esphome:
   name: carta-diggitale
   friendly_name: Carta Digitale
+
   on_boot:
-    priority: -10
+    priority: -100
     then:
-      - delay: 10s
+      #- delay: 10s
       - component.update: epaper  
+      - wait_until:
+          condition:
+            lambda: 'return id(data_updated) == true;'
+            # Wait a bit longer so all the items are received
+      - delay: 5s
+      - logger.log: "Initial sensor data received: Refreshing display..."
+      - lambda: 'id(initial_data_received) = true;'
+      - script.execute: update_screen
+
 esp32:
   board: esp32dev
   framework:
@@ -24,15 +34,73 @@ api:
 ota:
   password: !secret ota
 
+button:
+  - platform: shutdown
+    name: "CartaDigitale - Shutdown"
+  - platform: restart
+    name: "CartaDigitale - Restart"
+  - platform: template
+    name: "CartaDigitale - Refresh Screen"
+    entity_category: config
+    on_press:
+      - script.execute: update_screen
+
+
 spi:
   clk_pin: GPIO13
   mosi_pin: GPIO14
-  id: epaper_display
+  #clk_pin: 5
+  #mosi_pin: 18  
+  id: waveshare_spi
+  
+# Global variables for detecting if the display needs to be refreshed. (Thanks @paviro!)
+globals:
+  - id: data_updated
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+  - id: initial_data_received
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+  - id: recorded_display_refresh
+    type: int
+    restore_value: yes
+    initial_value: '0'
+
+# Script for updating screen - Refresh display and publish refresh count and time. (Thanks @paviro!)
+script:
+  - id: update_screen
+    then:
+      #- deep_sleep.prevent: deep_sleep_1
+      - lambda: 'id(data_updated) = false;'
+      - component.update: epaper
+      - lambda: 'id(recorded_display_refresh) += 1;'
+      - lambda: 'id(display_last_update).publish_state(id(homeassistant_time).now().timestamp);'
+      #- deep_sleep.enter: deep_sleep_1
 
 time:
   - platform: homeassistant
     id: homeassistant_time
     timezone: Europe/London
+    on_time:
+      - seconds: 0
+        minutes: /1
+        then:
+          - if:
+              condition:
+                lambda: 'return id(data_updated) == true;'
+              then:
+                - if:
+                    condition:
+                      binary_sensor.is_on: motion_kitchen
+                    then:
+                      - logger.log: "Sensor data updated and activity in home detected: Refreshing display..."
+                      - script.execute: update_screen
+                    else:
+                      - logger.log: "Sensor data updated but no activity in home - skipping display refresh."
+              else:
+                - logger.log: "No sensors updated - skipping display refresh."
 
 sun:
   latitude: !secret my_lat
@@ -48,21 +116,55 @@ binary_sensor:
     entity_id: binary_sensor.0x54ef441000772d70_occupancy
     id: motion_kitchen
 
+  - platform: template
+    name: "OTA Mode"
+    id: ota_mode
+    internal: true
+    on_state:
+      - if:
+          condition:
+            binary_sensor.is_on: ota_mode
+          then:
+            - deep_sleep.prevent: deep_sleep_1
+  - platform: template
+    name: "Sleep Mode"
+    id: sleep_mode
+    internal: true
+    on_state:
+      - if:
+          condition:
+            binary_sensor.is_on: sleep_mode
+          then:
+            - deep_sleep.enter: deep_sleep_1
+
+            
+deep_sleep:
+  run_duration: 60s
+  sleep_duration: 30min
+  wakeup_pin:
+    number: 14
+    inverted: True
+    mode: INPUT_PULLUP
+  id: deep_sleep_1
+
 
 display:
   - platform: waveshare_epaper
     id: epaper  
+    spi_id: waveshare_spi
     cs_pin: GPIO15
     dc_pin: GPIO27
     busy_pin: GPIO25
     reset_pin: GPIO26
     model: 7.50inV2alt
     rotation: 90
-    update_interval: 15min
-    #reset_duration: 4ms
+    update_interval: never
+    reset_duration: 2ms
 
     lambda: |-
-      ESP_LOGI("display", "Updating...");
+      //ESP_LOGI("display", "Updating...");
+
+      it.fill(COLOR_OFF);
 
       float livingroomtemp = id(livingroom_temp).state;
       float livingroomhum = id(livingroom_hum).state;
@@ -283,11 +385,11 @@ display:
       it.printf(400, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_2_wind);
 
       //Lower Separator
-      it.filled_rectangle(40, 660, 400, 3);
+      it.filled_rectangle(40, 660, 400, 3, COLOR_ON);
 
       //Date
-      it.strftime(100, 710 , id(font_date), TextAlign::CENTER, "%B %d", id(homeassistant_time).now());
-      it.strftime(100, 760 , id(font_date), TextAlign::CENTER, "%A", id(homeassistant_time).now());
+      it.strftime(100, 710 , id(font_date), COLOR_ON, TextAlign::CENTER, "%B %d", id(homeassistant_time).now());
+      it.strftime(100, 760 , id(font_date), COLOR_ON, TextAlign::CENTER, "%A", id(homeassistant_time).now());
 
       //Time
       //it.strftime(378, 730 , id(clockfont), TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
@@ -315,7 +417,7 @@ display:
         it.printf(370, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
         it.printf(420, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d2);     
       }  
-
+      
       //丸曜日
       //it.filled_circle(Ycenter, 730, 50);
       if (id(homeassistant_time).now().day_of_week == 1 || id(homeassistant_time).now().day_of_week == 7){ 
