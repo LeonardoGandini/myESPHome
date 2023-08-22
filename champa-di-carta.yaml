@@ -43,7 +43,6 @@ json:
 <<: !include .champa_sensors.yaml
 
 display:
-  
   - platform: waveshare_epaper
     id: epaper  
     cs_pin: GPIO15
@@ -54,7 +53,7 @@ display:
     rotation: 90
     update_interval: 1min
     reset_duration: 4ms
-
+    
     lambda: |-
       it.fill(COLOR_OFF);
 
@@ -217,13 +216,16 @@ display:
       it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "Senza danee i prét");
       it.printf(Ycenter, milanes_h + 40, id(font_milanes), COLOR_ON, TextAlign::CENTER, "no canten messa");
       
-
+      /*
       if (id(binariodiprova).state) {
-        it.printf(Ycenter, 740, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
+        it.printf(Ycenter, 730, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
       }
-     //it.printf(Ycenter, 750, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
+      */
+      //it.printf(Ycenter, 750, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
 
+      if (id(bin_waste_garden).state || id(bin_waste_food).state || id(bin_waste_grey).state || id(bin_waste_grey).state ){
 
+      }
 
       //weather
       int stormvalue = 25;
