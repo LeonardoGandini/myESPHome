@@ -40,62 +40,7 @@ sun:
 json:
 
 <<: !include .fontschampa.yaml
-
-sensor:
-  - platform: homeassistant
-    entity_id: sensor.grange_wind
-    id: windnow
-  - platform: homeassistant
-    entity_id: sensor.openweathermap_temperature
-    id: tempnow
-  - platform: homeassistant
-    entity_id: sensor.sun_next_rising
-    id: sunrising
-  - platform: homeassistant
-    entity_id: sensor.sun_next_setting
-    id: sunsetting
-  - platform: homeassistant
-    entity_id: sensor.grange_thunderstorm_probability_day_0d
-    id: stormd0
-  - platform: homeassistant
-    entity_id: sensor.grange_thunderstorm_probability_day_1d   
-    id: stormd1
-  - platform: homeassistant
-    entity_id: sensor.grange_thunderstorm_probability_day_2d   
-    id: stormd2
-
-  - platform: homeassistant
-    entity_id: sensor.kitchen_temperature
-    id: kitchen_temp
-  - platform: homeassistant
-    entity_id: sensor.kitchen_humidity
-    id: kitchen_hum
-
-
-text_sensor:
-  - platform: homeassistant
-    entity_id: weather.grange_2
-    id: weathernow
-
-  - platform: homeassistant
-    entity_id: weather.grange_2
-    attribute: forecast
-    id: accuweatherfore
-    internal: yes
-
-  - platform: sun
-    type: sunrise
-    format: "%H:%M"
-    id: sunrise_hour
-  - platform: sun
-    type: sunset
-    format: "%H:%M"
-    id: sunset_hour
-
-binary_sensor:
-  - platform: homeassistant
-    entity_id: input_boolean.binario_di_prova
-    id: binariodiprova
+<<: !include .champa_sensors.yaml
 
 display:
   
