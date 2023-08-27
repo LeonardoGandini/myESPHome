@@ -288,38 +288,28 @@ display:
 
 
       
-      
-      if (id(binariodiprova).state || id(binariodiprova).state) {
+      if (!id(binariodiprova).state || !id(binariodiprova).state) {
+
+        //Weather CasaCaseItalia
+        it.printf(col_uno, casae_title, id(font_bold), TextAlign::CENTER, "Milano");
+        it.printf(col_due, casae_title, id(font_bold), TextAlign::CENTER, "Armeno");
+        it.printf(col_tre, casae_title, id(font_bold), TextAlign::CENTER, "Mezzema");
+
+        it.printf(col_uno, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_mi_condition.c_str()].c_str());
+        it.printf(col_uno, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmilano);
+
+        it.printf(col_due, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_ar_condition.c_str()].c_str());
+        it.printf(col_due, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", temparmeno);
         
-        it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
+        it.printf(col_tre, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_me_condition.c_str()].c_str());
+        it.printf(col_tre, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmezzema);
       
       }else{
-
-      //Weather CasaCaseItalia
-      it.printf(col_uno, casae_title, id(font_bold), TextAlign::CENTER, "Milano");
-      it.printf(col_due, casae_title, id(font_bold), TextAlign::CENTER, "Armeno");
-      it.printf(col_tre, casae_title, id(font_bold), TextAlign::CENTER, "Mezzema");
-
-      it.printf(col_uno, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_mi_condition.c_str()].c_str());   
-      it.printf(col_uno, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmilano);
-
-      it.printf(col_due, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_ar_condition.c_str()].c_str());
-      it.printf(col_due, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", temparmeno);
-      
-      it.printf(col_tre, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_me_condition.c_str()].c_str());
-      it.printf(col_tre, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmezzema);
-
+        it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
+        it.printf(Ycenter, 750, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
       }
       
-      //it.printf(Ycenter, 750, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
-      
-
-
-
-
-
-
-
+    
 
       //Day0
       it.printf(col_uno, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_0_condition.c_str()].c_str());          
