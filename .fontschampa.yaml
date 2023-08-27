@@ -10,6 +10,13 @@ font:
   - file: 'fonts/Roboto-Bold.ttf'
     id: font_bold
     size: 28
+    glyphs:
+      ['&', '@', '!', ',', '.', '"', '%', '’','(', ')', '+', '-', '_', ':', '°', '0',
+       '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
+       'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+       'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
+       'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+       'u', 'v', 'w', 'x', 'y', 'z','/','º','µ','³','ò','ó','à','á','ì','í','ù','ú','œ','ö','æ','ü','ô','è','é']  
 
   - file: 'fonts/Roboto-Regular.ttf'
     id: font_regular_75
@@ -31,7 +38,7 @@ font:
        'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
        'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
        'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-       'u', 'v', 'w', 'x', 'y', 'z','/','º','µ','³','ò','ó','à','á','ì','í','ù','ú','œ','ö','æ','ü','ô','è','é']  
+       'u', 'v', 'w', 'x', 'y', 'z','/','º','µ','³','ò','ó','à','á','ì','í','ù','ú','œ','ö','æ','ü','ô','è','é',"'"] 
 
   - file: 'fonts/Itim-Regular.ttf'
     id: font_date
@@ -86,6 +93,29 @@ font:
       ]
 
   - file: 'fonts/materialdesignicons-webfont.ttf'
+    id: weather_font_small
+    size: 60
+    glyphs: [
+      # Weather
+      "\U000F0590", # mdi-weather-cloudy
+      "\U000F0594", # mdi-weather-night
+      "\U000F0591", # mdi-weather-fog
+      "\U000F0592", # mdi-weather-hail
+      "\U000F0593", # mdi-weather-lightning
+      "\U000F067E", # mdi-weather-lightning-rainy
+      "\U000F0595", # mdi-weather-partly-cloudy
+      "\U000F0596", # mdi-weather-pouring
+      "\U000F0597", # mdi-weather-rainy
+      "\U000F0598", # mdi-weather-snowy
+      "\U000F067F", # mdi-weather-snowy-rainy
+      "\U000F0599", # mdi-weather-sunny
+      "\U000F059B", # mdi-weather-sunset-down
+      "\U000F059C", # mdi-weather-sunset-up
+      "\U000F059D", # mdi-weather-windy
+      "\U000F059E", # mdi-weather-windy-variant
+      ]
+
+  - file: 'fonts/materialdesignicons-webfont.ttf'
     id: wind_font
     size: 45
     glyphs: [
@@ -110,6 +140,7 @@ font:
       "\U000F050F", # temperature
       "\U000F058E" # humidity
       ]
+
   - file: 'fonts/materialdesignicons-webfont.ttf'
     id: icon_font_storm
     size: 30
