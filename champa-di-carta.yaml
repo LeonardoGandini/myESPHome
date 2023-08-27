@@ -1,6 +1,11 @@
 esphome:
   name: champa-di-carta
   friendly_name: Champa di Carta
+  on_boot:
+    priority: -10
+    then:
+      - delay: 10s
+      - component.update: epaper
 
 esp32:
   board: esp32dev
@@ -60,6 +65,10 @@ display:
       float wind_now = id(windnow).state;
       float temp_now = id(tempnow).state;
 
+      float tempmilano = id(temp_milano).state;
+      float temparmeno = id(temp_armeno).state;
+      float tempmezzema = id(temp_mezzema).state;
+
       float storm_d0 = id(stormd0).state;
       float storm_d1 = id(stormd1).state;
       float storm_d2 = id(stormd2).state;
@@ -105,30 +114,96 @@ display:
       int milanes_h = 160;
       int milanes_secondline = 35;
 
+      int col_uno = 80;
+      int col_due = 240;
+      int col_tre = 400;
+
+      int meseX = 140;
+      int meseY = 40;
+
+      int giornoX = 140;
+      int giornoY = 90;
+
+      int spazzaH = 730;
+      int giardH = 750;
+
+      int stormvalue = -5;
+
+      int weath_ico1 = 305;
+      int weath_txt1 = 370;
+      int weath_ico2 = 410;
+      int weath_txt2 = 445;
+
+      int sens_title = 505;
+      int casae_title = 685;
+
+      //weather
+
+      if (storm_d0 >= stormvalue || storm_d1 >= stormvalue || storm_d2 >= stormvalue){
+        int weath_ico1 = 455;
+        int weath_txt1 = 520;
+        int weath_ico2 = 600;
+        int weath_txt2 = 635;
+      }
+  
+      DynamicJsonDocument doc(2048);
+      DynamicJsonDocument docmi(2048);
+      DynamicJsonDocument docar(2048);
+      DynamicJsonDocument docme(2048);
+
+      deserializeJson(doc, (id(accuweatherfore).state.c_str()));
+      JsonArray root = doc.as<JsonArray>();
+      
+      deserializeJson(docmi, (id(weather_milano).state.c_str()));
+      JsonArray rootmi = docmi.as<JsonArray>();
+      
+      deserializeJson(docar, (id(weather_armeno).state.c_str()));
+      JsonArray rootar = docar.as<JsonArray>();
+      
+      deserializeJson(docme, (id(weather_mezzema).state.c_str()));
+      JsonArray rootme = docme.as<JsonArray>();
+
+
+      JsonObject root_0 = root[0];
+      JsonObject root_1 = root[1];
+      JsonObject root_2 = root[2];
+      std::string root_0_condition = root_0["condition"];
+      std::string root_1_condition = root_1["condition"];
+      std::string root_2_condition = root_2["condition"];
+
+      float root_0_temperature = root_0["temperature"];
+      float root_1_temperature = root_1["temperature"];
+      float root_2_temperature = root_2["temperature"];
+      
+
+      JsonObject root_mi = rootmi[0];
+      std::string root_mi_condition = root_mi["condition"];
+
+      JsonObject root_ar = rootar[0];
+      std::string root_ar_condition = root_ar["condition"];
+
+      JsonObject root_me = rootme[0];
+      std::string root_me_condition = root_me["condition"];      
+
+      float root_0_wind = root_0["wind_speed"];
+      float root_1_wind = root_1["wind_speed"];
+      float root_2_wind = root_2["wind_speed"];
+
+      float root_1_templow = root_1["templow"];
+      float root_2_templow = root_2["templow"];
+
       //GRID
       //verticali
       it.filled_rectangle(160, 250, grid_thick, 410);
       it.filled_rectangle(320, 250, grid_thick, 410);
 
       //it.filled_rectangle(Ycenter, 600, grid_thick, Yend);
-      
+
       //orizzontali
       it.filled_rectangle(Hstart, 250, Hend, grid_thick);
       it.filled_rectangle(Hstart, 480, Hend, grid_thick);
       it.filled_rectangle(Hstart, 660, Hend, grid_thick);
 
-      //it.filled_rectangle(Hstart, (Yend-600)/2, Hend, grid_thick);
-      
-      int meseX = 140;
-      int meseY = 40;
-
-      int giornoX = 140;
-      int giornoY = 90;
-      
-      //Date
-      //it.strftime(140, 40 , id(font_date), COLOR_ON, TextAlign::CENTER, "%B %d", id(homeassistant_time).now());
-      //it.strftime(140, 90 , id(font_date), COLOR_ON, TextAlign::CENTER, "%A", id(homeassistant_time).now());
-      //it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::LEFT, "%d", id(homeassistant_time).now());
 
       auto time_now = id(homeassistant_time).now().day_of_week;
         if (id(homeassistant_time).now().day_of_week == 1){ 
@@ -205,7 +280,6 @@ display:
           it.printf(meseX, meseY , id(font_date), COLOR_ON, TextAlign::CENTER, "Dicémber");
         } 
 
-
       //SUN
       it.printf(320, 45, id(sun_font), TextAlign::CENTER , icosunup.c_str());
       it.printf(400, 40, id(font_sun_txt), TextAlign::CENTER, "%s", sunrise.c_str());
@@ -216,56 +290,38 @@ display:
       it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "Senza danee i prét");
       it.printf(Ycenter, milanes_h + 40, id(font_milanes), COLOR_ON, TextAlign::CENTER, "no canten messa");
       
-      /*
-      if (id(binariodiprova).state) {
-        it.printf(Ycenter, 730, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
+      
+      if (id(binariodiprova).state || id(binariodiprova).state) {
+        
+        it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
+      
+      }else{
+
+      //Weather CasaCaseItalia
+      it.printf(col_uno, casae_title, id(font_bold), TextAlign::CENTER, "Milano");
+      it.printf(col_due, casae_title, id(font_bold), TextAlign::CENTER, "Armeno");
+      it.printf(col_tre, casae_title, id(font_bold), TextAlign::CENTER, "Mezzema");
+
+      it.printf(col_uno, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_mi_condition.c_str()].c_str());   
+      it.printf(col_uno, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmilano);
+
+      it.printf(col_due, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_ar_condition.c_str()].c_str());
+      it.printf(col_due, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", temparmeno);
+      
+      it.printf(col_tre, 735, id(weather_font_small), TextAlign::CENTER, "%s", weather_icon_state[root_me_condition.c_str()].c_str());
+      it.printf(col_tre, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmezzema);
+
       }
-      */
+      
       //it.printf(Ycenter, 750, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
+      
 
-      if (id(bin_waste_garden).state || id(bin_waste_food).state || id(bin_waste_grey).state || id(bin_waste_grey).state ){
 
-      }
 
-      //weather
-      int stormvalue = 25;
 
-      int weath_ico1 = 305;
-      int weath_txt1 = 370;
-      int weath_ico2 = 410;
-      int weath_txt2 = 445;
 
-      if (storm_d0 >= stormvalue || storm_d1 >= stormvalue || storm_d2 >= stormvalue){
-        int weath_ico1 = 455;
-        int weath_txt1 = 520;
-        int weath_ico2 = 600;
-        int weath_txt2 = 635;
-      }
-  
-      DynamicJsonDocument doc(2048);
-      deserializeJson(doc, (id(accuweatherfore).state.c_str()));
-      JsonArray root = doc.as<JsonArray>();
 
-      JsonObject root_0 = root[0];
-      JsonObject root_1 = root[1];
-      JsonObject root_2 = root[2];
-      std::string root_0_condition = root_0["condition"];
-      std::string root_1_condition = root_1["condition"];
-      std::string root_2_condition = root_2["condition"];
-      float root_0_temperature = root_0["temperature"];
-      float root_1_temperature = root_1["temperature"];
-      float root_2_temperature = root_2["temperature"];
 
-      float root_0_wind = root_0["wind_speed"];
-      float root_1_wind = root_1["wind_speed"];
-      float root_2_wind = root_2["wind_speed"];
-
-      float root_1_templow = root_1["templow"];
-      float root_2_templow = root_2["templow"];
-
-      int col_uno = 80;
-      int col_due = 240;
-      int col_tre = 400;
 
       //Day0
       it.printf(col_uno, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_0_condition.c_str()].c_str());          
@@ -288,10 +344,9 @@ display:
       it.printf(col_tre, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str());
       it.printf(col_tre, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_2_wind);
 
-      int sens_title = 505;
-      it.printf(col_uno, sens_title, id(font_bold), TextAlign::CENTER, "Boiler");
-      it.printf(col_due, sens_title, id(font_bold), TextAlign::CENTER, "Bedroom");
-      it.printf(col_tre, sens_title, id(font_bold), TextAlign::CENTER, "Attic");
+      it.printf(col_uno, sens_title, id(font_bold), TextAlign::CENTER, "Caldera");
+      it.printf(col_due, sens_title, id(font_bold), TextAlign::CENTER, "Lètt");
+      it.printf(col_tre, sens_title, id(font_bold), TextAlign::CENTER, "Tecc");
 
 
       float kitchtemp = id(kitchen_temp).state;
