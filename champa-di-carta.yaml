@@ -2,7 +2,7 @@ esphome:
   name: champa-di-carta
   friendly_name: Champa di Carta
   on_boot:
-    priority: -10
+    priority: 200
     then:
       - delay: 10s
       - component.update: epaper
@@ -112,7 +112,7 @@ display:
       int grid_thick = 2;
 
       int milanes_h = 160;
-      int milanes_secondline = 35;
+      int milanes_secondline = 45;
 
       int col_uno = 80;
       int col_due = 240;
@@ -204,41 +204,40 @@ display:
       it.filled_rectangle(Hstart, 480, Hend, grid_thick);
       it.filled_rectangle(Hstart, 660, Hend, grid_thick);
 
-
       auto time_now = id(homeassistant_time).now().day_of_week;
         if (id(homeassistant_time).now().day_of_week == 1){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "Senza danee i prét");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "no canten messa");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Domenega %d", id(homeassistant_time).now());
         }      
         if (id(homeassistant_time).now().day_of_week == 2){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "El fumm el va in aria");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "e l'acqua la corr in giò");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Lunedì %d", id(homeassistant_time).now());
         }
         if (id(homeassistant_time).now().day_of_week == 3){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "A fà polenta ghe vœur");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "l'oli de gómbed");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Martedì %d", id(homeassistant_time).now());
         }      
         if (id(homeassistant_time).now().day_of_week == 4){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "La nostra fortunna se");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "la femm nun de per nun");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Mercoldì %d", id(homeassistant_time).now());
         }
         if (id(homeassistant_time).now().day_of_week == 5){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "La legge è uguale");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "per tutti... i strascion");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Giovedì %d", id(homeassistant_time).now());
         }      
         if (id(homeassistant_time).now().day_of_week == 6){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "A sto mond l'è inscí:");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "o ingannà o vess ingannaa");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Venerdì %d", id(homeassistant_time).now());
         }
         if (id(homeassistant_time).now().day_of_week == 7){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "A fà divers di olter ");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "se ciappa-sù del matt");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Sabet %d", id(homeassistant_time).now());
         }
 
@@ -287,8 +286,7 @@ display:
       it.printf(320, 100, id(sun_font), TextAlign::CENTER , icosundown.c_str());
       it.printf(400, 95, id(font_sun_txt), TextAlign::CENTER, "%s", sunset.c_str());
 
-      it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "Senza danee i prét");
-      it.printf(Ycenter, milanes_h + 40, id(font_milanes), COLOR_ON, TextAlign::CENTER, "no canten messa");
+
       
       
       if (id(binariodiprova).state || id(binariodiprova).state) {
