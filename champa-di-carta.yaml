@@ -302,7 +302,7 @@ display:
       int spazzaH = 735;
       int giardH = 735;
 
-      if (!id(champa_calendario_uno).state && !id(champa_waste_uno).state && !id(champa_calendario_due).state && !id(champa_waste_due).state && !id(champa_giardinieri).state) {
+      if (!id(bin_waste_garden).state && !id(bin_waste_food).state && !id(bin_waste_grey).state && !id(bin_waste_green).state && !id(bin_giardinieri).state && !id(cal_food).state && !id(cal_grey).state && !id(cal_green).state && !id(cal_garden).state && !id(cal_gardeneners).state) {
 
         //Weather CasaCaseItalia
         it.printf(col_uno, casae_title, id(font_bold), TextAlign::CENTER, "Milano");
@@ -319,20 +319,46 @@ display:
         it.printf(col_tre, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmezzema);
       
       }else{
-        if (id(champa_giardinieri).state && (id(champa_calendario_due).state || id(champa_calendario_uno).state)) {
+        if ((id(bin_giardinieri).state || id(cal_gardeneners).state ) && (id(bin_waste_garden).state || id(bin_waste_food).state || id(bin_waste_grey).state || id(bin_waste_green).state || id(cal_food).state || id(cal_grey).state || id(cal_green).state || id(cal_garden).state)) {
           giardH = 765;
           spazzaH = 705;
         }
-        if (id(champa_calendario_uno).state) {
-          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
+
+        if (id(bin_waste_garden).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Giardino");
         }
-        if (id(champa_calendario_due).state) {
-          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il stocazzo");
-        }        
-        if (id(champa_giardinieri).state) {
-          it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
+        if (id(bin_waste_food).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Umido");
+        }
+         if (id(bin_waste_grey).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Generico");
+        }
+        if (id(bin_waste_green).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Riciclo");
+        }
+
+
+        if (id(bin_giardinieri).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
+        }
+
+
+        if (id(cal_food).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono l'umido");
+        }
+        if (id(cal_grey).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono il generico");
+        }
+        if (id(cal_green).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono il riciclo");
+        }                             
+        if (id(cal_garden).state) {
+          it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono il giardino");
         } 
-        
+
+        if (id(cal_gardeneners).state) {
+        it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi vengono i giardinieri");
+      }        
       }
       
     
