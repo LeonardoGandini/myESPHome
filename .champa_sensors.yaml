@@ -28,24 +28,24 @@ sensor:
     entity_id: sensor.kitchen_humidity
     id: kitchen_hum
     
-  #- platform: homeassistant
-  #  entity_id: sensor.temp_boiler_temperature
-  #  id: boiler_temp
-  #- platform: homeassistant
-  #  entity_id: sensor.temp_boiler_humidity
-  #  id: boiler_hum
-  #- platform: homeassistant
-  #  entity_id: sensor.bedroom_temp_temperature
-  #  id: bedroom_temp
-  #- platform: homeassistant
-  #  entity_id: sensor.bedroom_temp_humidity
-  #  id: bedroom_hum
-  #- platform: homeassistant
-  #  entity_id: sensor.temp_attic_temperature
-  #  id: attic_temp
-  #- platform: homeassistant
-  #  entity_id: sensor.temp_attic_humidity
-  #  id: attic_hum
+  - platform: homeassistant
+    entity_id: sensor.temp_boiler_temperature
+    id: boiler_temp
+  - platform: homeassistant
+    entity_id: sensor.temp_boiler_humidity
+    id: boiler_hum
+  - platform: homeassistant
+    entity_id: sensor.bedroom_temp_temperature
+    id: bedroom_temp
+  - platform: homeassistant
+    entity_id: sensor.bedroom_temp_humidity
+    id: bedroom_hum
+  - platform: homeassistant
+    entity_id: sensor.temp_attic_temperature
+    id: attic_temp
+  - platform: homeassistant
+    entity_id: sensor.temp_attic_humidity
+    id: attic_hum
 
   - platform: homeassistant
     entity_id: sensor.weather_milano_temperature
@@ -104,33 +104,33 @@ binary_sensor:
     entity_id: input_boolean.binario_di_prova
     id: binariodiprova
 
-  #- platform: homeassistant
-  #  entity_id: input_boolean.binary_waste_garden
-  #  id: bin_waste_garden
-  #- platform: homeassistant
-  #  entity_id: input_boolean.binary_waste_food
-  #  id: bin_waste_food
-  #- platform: homeassistant
-  #  entity_id: input_boolean.binary_waste_grey
-  #  id: bin_waste_grey
-  #- platform: homeassistant
-  #  entity_id: input_boolean.binary_waste_green
-  #  id: bin_waste_green
-  #- platform: homeassistant
-  #  entity_id: input_boolean.binary_giardinieri
-  #  id: bin_giardinieri
-  #- platform: homeassistant
-  #  entity_id: calendar.recycle_food_waste
-  #  id: cal_food
-  #- platform: homeassistant
-  #  entity_id: calendar.recycle_grey
-  #  id: cal_grey
-  #- platform: homeassistant
-  #  entity_id: calendar.recycle_green_blue
-  #  id: cal_green
-  #- platform: homeassistant
-  #  entity_id: calendar.garden_waste
-  #  id: cal_garden
-  #- platform: homeassistant
-  #  entity_id: calendar.gardeners
-  #  id: cal_gardeneners
+  - platform: homeassistant
+    entity_id: input_boolean.binary_waste_garden
+    id: bin_waste_garden
+  - platform: homeassistant
+    entity_id: input_boolean.binary_waste_food
+    id: bin_waste_food
+  - platform: homeassistant
+    entity_id: input_boolean.binary_waste_grey
+    id: bin_waste_grey
+  - platform: homeassistant
+    entity_id: input_boolean.binary_waste_green
+    id: bin_waste_green
+  - platform: homeassistant
+    entity_id: input_boolean.binary_giardinieri
+    id: bin_giardinieri
+  - platform: homeassistant
+    entity_id: calendar.recycle_food_waste
+    id: cal_food
+  - platform: homeassistant
+    entity_id: calendar.recycle_grey
+    id: cal_grey
+  - platform: homeassistant
+    entity_id: calendar.recycle_green_blue
+    id: cal_green
+  - platform: homeassistant
+    entity_id: calendar.garden_waste
+    id: cal_garden
+  - platform: homeassistant
+    entity_id: calendar.gardeners
+    id: cal_gardeneners

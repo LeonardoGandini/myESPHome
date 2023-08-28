@@ -37,6 +37,19 @@ time:
 - platform: homeassistant
   id: homeassistant_time
   timezone: Europe/London
+  on_time:
+    - seconds: 0
+      minutes: /1
+      then:
+        - if:
+            condition:
+              lambda: 'return id(binariodiprova).state;'
+            then:
+              - logger.log: "Sensor data updated and activity in home detected: Refreshing display..."
+              - component.update: epaper
+            else:
+              - delay: 1440min #24hr
+              - logger.log: "Sensor data updated but no activity in home - skipping display refresh."
 
 sun:
   latitude: !secret champa_lat
@@ -56,7 +69,7 @@ display:
     reset_pin: GPIO26
     model: 7.50inV2alt
     rotation: 90
-    update_interval: 1min
+    update_interval: never
     reset_duration: 4ms
     
     lambda: |-
@@ -124,8 +137,7 @@ display:
       int giornoX = 140;
       int giornoY = 90;
 
-      int spazzaH = 730;
-      int giardH = 750;
+
 
       int stormvalue = -5;
 
@@ -287,8 +299,10 @@ display:
       it.printf(400, 95, id(font_sun_txt), TextAlign::CENTER, "%s", sunset.c_str());
 
 
-      
-      if (!id(binariodiprova).state || !id(binariodiprova).state) {
+      int spazzaH = 735;
+      int giardH = 735;
+
+      if (!id(champa_calendario_uno).state && !id(champa_waste_uno).state && !id(champa_calendario_due).state && !id(champa_waste_due).state && !id(champa_giardinieri).state) {
 
         //Weather CasaCaseItalia
         it.printf(col_uno, casae_title, id(font_bold), TextAlign::CENTER, "Milano");
@@ -305,8 +319,20 @@ display:
         it.printf(col_tre, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmezzema);
       
       }else{
-        it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
-        it.printf(Ycenter, 750, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
+        if (id(champa_giardinieri).state && (id(champa_calendario_due).state || id(champa_calendario_uno).state)) {
+          giardH = 765;
+          spazzaH = 705;
+        }
+        if (id(champa_calendario_uno).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il riciclo");
+        }
+        if (id(champa_calendario_due).state) {
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani raccolgono il stocazzo");
+        }        
+        if (id(champa_giardinieri).state) {
+          it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani vengono i giardinieri");
+        } 
+        
       }
       
     
