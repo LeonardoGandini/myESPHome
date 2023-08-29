@@ -319,13 +319,13 @@ display:
         it.printf(col_tre, 780, id(font_bold), TextAlign::CENTER, "%.1f°C", tempmezzema);
       
       }else{
-        if ((id(bin_giardinieri).state || id(cal_gardeneners).state ) && (id(bin_waste_garden).state || id(bin_waste_food).state || id(bin_waste_grey).state || id(bin_waste_green).state || id(cal_food).state || id(cal_grey).state || id(cal_green).state || id(cal_garden).state)) {
+        if (((id(bin_giardinieri).state || id(cal_gardeneners).state ) && (id(bin_waste_garden).state || id(bin_waste_food).state || id(bin_waste_grey).state || id(bin_waste_green).state || id(cal_food).state || id(cal_grey).state || id(cal_green).state || id(cal_garden).state)) || ((id(bin_waste_garden).state || id(cal_garden).state ) && (id(bin_waste_food).state || id(bin_waste_grey).state || id(bin_waste_green).state || id(cal_food).state || id(cal_grey).state || id(cal_green).state))) {
           giardH = 765;
           spazzaH = 705;
         }
 
         if (id(bin_waste_garden).state) {
-          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Giardino");
+          it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Giardino");
         }
         if (id(bin_waste_food).state) {
           it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Umido");
