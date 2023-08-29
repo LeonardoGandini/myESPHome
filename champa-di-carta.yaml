@@ -2,7 +2,7 @@ esphome:
   name: champa-di-carta
   friendly_name: Champa di Carta
   on_boot:
-    priority: 200
+    priority: -100
     then:
       - delay: 10s
       - component.update: epaper
@@ -33,6 +33,20 @@ spi:
   mosi_pin: GPIO14
   id: epaper_display
 
+
+globals:
+  - id: recorded_display_refresh
+    type: int
+    restore_value: yes
+    initial_value: '0'
+
+script:
+  - id: update_screen
+    then:
+      - component.update: epaper
+      - lambda: 'id(recorded_display_refresh) += 1;'
+      - lambda: 'id(display_last_update).publish_state(id(homeassistant_time).now().timestamp);'
+
 time:
 - platform: homeassistant
   id: homeassistant_time
@@ -45,11 +59,12 @@ time:
             condition:
               lambda: 'return id(binariodiprova).state;'
             then:
-              - logger.log: "Sensor data updated and activity in home detected: Refreshing display..."
-              - component.update: epaper
+              - logger.log: "yolanda"
+              - script.execute: update_screen
             else:
-              - delay: 1440min #24hr
-              - logger.log: "Sensor data updated but no activity in home - skipping display refresh."
+              - logger.log: "nopanda"
+              - delay: 5000min
+              - script.execute: update_screen
 
 sun:
   latitude: !secret champa_lat
