@@ -358,7 +358,7 @@ display:
 
         if (id(cal_gardeneners).state) {
         it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi vengono i giardinieri");
-      }        
+        }        
       }
       
     
