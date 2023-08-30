@@ -338,9 +338,12 @@ display:
           giardH = 765;
           spazzaH = 705;
         }
+        
+        int pollo = 0;
 
         if (id(bin_waste_garden).state) {
           it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Giardino");
+          int pollo = 1;
         }
         if (id(bin_waste_food).state) {
           it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Umido");
@@ -361,7 +364,7 @@ display:
         if (id(cal_food).state) {
           it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono l'umido");
         }
-        if (id(cal_grey).state) {
+        if (id(cal_grey).state){
           it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono il generico");
         }
         if (id(cal_green).state) {
