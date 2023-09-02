@@ -23,8 +23,6 @@ ota:
 
 wifi:
   networks:
-    - ssid: !secret wifi_ssid
-      password: !secret wifi_password
     - ssid: !secret champa_wifi_ssid
       password: !secret champa_wifi_password      
 
@@ -402,26 +400,33 @@ display:
       it.printf(col_tre, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str());
       it.printf(col_tre, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_2_wind);
 
+
+
+
+
       it.printf(col_uno, sens_title, id(font_bold), TextAlign::CENTER, "Caldera");
       it.printf(col_due, sens_title, id(font_bold), TextAlign::CENTER, "Lètt");
       it.printf(col_tre, sens_title, id(font_bold), TextAlign::CENTER, "Tecc");
 
+      float boilertemp = id(boiler_temp).state;
+      float boilerhum = id(boiler_hum).state;
+      float bedtemp = id(bedroom_temp).state;
+      float bedhum = id(bedroom_hum).state;
+      float attictemp = id(attic_temp).state;
+      float attichum = id(attic_hum).state;
 
-      float kitchtemp = id(kitchen_temp).state;
-      float kitchhum = id(kitchen_hum).state;
-
-      //Kitchen
+      
       it.printf(col_uno, sens_title+40, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
-      it.printf(col_uno, sens_title+70, id(font_bold), TextAlign::CENTER , "%.1f°C", kitchtemp);
+      it.printf(col_uno, sens_title+70, id(font_bold), TextAlign::CENTER , "%.1f°C", boilertemp);
       it.printf(col_uno, sens_title+100, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
-      it.printf(col_uno, sens_title+125, id(font_regular), TextAlign::CENTER , "%.1f%%", kitchhum);  
+      it.printf(col_uno, sens_title+125, id(font_regular), TextAlign::CENTER , "%.1f%%", boilerhum);  
 
       it.printf(col_due, sens_title+40, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
-      it.printf(col_due, sens_title+70, id(font_bold), TextAlign::CENTER , "%.1f°C", kitchtemp);
+      it.printf(col_due, sens_title+70, id(font_bold), TextAlign::CENTER , "%.1f°C", bedtemp);
       it.printf(col_due, sens_title+100, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
-      it.printf(col_due, sens_title+125, id(font_regular), TextAlign::CENTER , "%.1f%%", kitchhum);  
+      it.printf(col_due, sens_title+125, id(font_regular), TextAlign::CENTER , "%.1f%%", bedhum);  
 
       it.printf(col_tre, sens_title+40, id(icon_font_small), TextAlign::CENTER , icotemp.c_str());
-      it.printf(col_tre, sens_title+70, id(font_bold), TextAlign::CENTER , "%.1f°C", kitchtemp);
+      it.printf(col_tre, sens_title+70, id(font_bold), TextAlign::CENTER , "%.1f°C", attictemp);
       it.printf(col_tre, sens_title+100, id(icon_font_small), TextAlign::CENTER , icohum.c_str());
-      it.printf(col_tre, sens_title+125, id(font_regular), TextAlign::CENTER , "%.1f%%", kitchhum);  
+      it.printf(col_tre, sens_title+125, id(font_regular), TextAlign::CENTER , "%.1f%%", attichum);  

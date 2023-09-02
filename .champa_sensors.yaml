@@ -27,13 +27,6 @@ sensor:
   - platform: homeassistant
     entity_id: sensor.grange_thunderstorm_probability_day_2d   
     id: stormd2
-
-  - platform: homeassistant
-    entity_id: sensor.kitchen_temperature
-    id: kitchen_temp
-  - platform: homeassistant
-    entity_id: sensor.kitchen_humidity
-    id: kitchen_hum
     
   - platform: homeassistant
     entity_id: sensor.temp_boiler_temperature
