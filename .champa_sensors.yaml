@@ -7,7 +7,7 @@ sensor:
     id: display_last_update
     
   - platform: homeassistant
-    entity_id: sensor.grange_wind
+    entity_id: sensor.champahome_wind
     id: windnow
   - platform: homeassistant
     entity_id: sensor.openweathermap_temperature
@@ -19,14 +19,21 @@ sensor:
     entity_id: sensor.sun_next_setting
     id: sunsetting
   - platform: homeassistant
-    entity_id: sensor.grange_thunderstorm_probability_day_0d
+    entity_id: sensor.champahome_thunderstorm_probability_day_0d
     id: stormd0
   - platform: homeassistant
-    entity_id: sensor.grange_thunderstorm_probability_day_1d   
+    entity_id: sensor.champahome_thunderstorm_probability_day_1d   
     id: stormd1
   - platform: homeassistant
-    entity_id: sensor.grange_thunderstorm_probability_day_2d   
+    entity_id: sensor.champahome_thunderstorm_probability_day_2d   
     id: stormd2
+
+  - platform: homeassistant
+    entity_id: sensor.kitchen_temperature
+    id: kitchen_temp
+  - platform: homeassistant
+    entity_id: sensor.kitchen_humidity
+    id: kitchen_hum
     
   - platform: homeassistant
     entity_id: sensor.temp_boiler_temperature
@@ -61,11 +68,11 @@ sensor:
 
 text_sensor:
   - platform: homeassistant
-    entity_id: weather.grange_2
+    entity_id: weather.champahome
     id: weathernow
 
   - platform: homeassistant
-    entity_id: weather.grange_2
+    entity_id: weather.champahome
     attribute: forecast
     id: accuweatherfore
     internal: yes
@@ -101,7 +108,7 @@ text_sensor:
 
 binary_sensor:
   - platform: homeassistant
-    entity_id: input_boolean.binario_di_prova
+    entity_id: input_boolean.binariodiprova
     id: binariodiprova
 
   - platform: homeassistant

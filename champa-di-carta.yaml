@@ -51,17 +51,17 @@ time:
   timezone: Europe/London
   on_time:
     - seconds: 0
-      minutes: /1
+      minutes: /15
       then:
         - if:
             condition:
               lambda: 'return id(binariodiprova).state;'
             then:
-              - logger.log: "yolanda"
+              - logger.log: "Bella lì, c'è qualcuno!"
               - script.execute: update_screen
             else:
               - logger.log: "nopanda"
-              - delay: 5000min
+              - delay: 1440min
               - script.execute: update_screen
 
 sun:
@@ -400,18 +400,15 @@ display:
       it.printf(col_tre, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str());
       it.printf(col_tre, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_2_wind);
 
-
-
-
-
       it.printf(col_uno, sens_title, id(font_bold), TextAlign::CENTER, "Caldera");
       it.printf(col_due, sens_title, id(font_bold), TextAlign::CENTER, "Lètt");
       it.printf(col_tre, sens_title, id(font_bold), TextAlign::CENTER, "Tecc");
 
-      float boilertemp = id(boiler_temp).state;
-      float boilerhum = id(boiler_hum).state;
+
       float bedtemp = id(bedroom_temp).state;
       float bedhum = id(bedroom_hum).state;
+      float boilertemp = id(boiler_temp).state;
+      float boilerhum = id(boiler_hum).state;
       float attictemp = id(attic_temp).state;
       float attichum = id(attic_hum).state;
 
