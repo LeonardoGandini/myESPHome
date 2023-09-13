@@ -237,12 +237,12 @@ display:
         }      
         if (id(homeassistant_time).now().day_of_week == 2){ 
           it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "El fumm el va in aria");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "e l'acqua la corr in giò");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "e l’acqua la corr in giò");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Lunedì %d", id(homeassistant_time).now());
         }
         if (id(homeassistant_time).now().day_of_week == 3){ 
           it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "A fà polenta ghe vœur");
-          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "l'oli de gómbed");
+          it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "l’oli de gómbed");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Martedì %d", id(homeassistant_time).now());
         }      
         if (id(homeassistant_time).now().day_of_week == 4){ 
@@ -256,7 +256,7 @@ display:
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Giovedì %d", id(homeassistant_time).now());
         }      
         if (id(homeassistant_time).now().day_of_week == 6){ 
-          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "A sto mond l'è inscí:");
+          it.printf(Ycenter, milanes_h, id(font_milanes), COLOR_ON, TextAlign::CENTER, "A sto mond l’è inscí:");
           it.printf(Ycenter, milanes_h + milanes_secondline, id(font_milanes), COLOR_ON, TextAlign::CENTER, "o ingannà o vess ingannaa");
           it.strftime(giornoX, giornoY, id(font_date), COLOR_ON, TextAlign::CENTER, "Venerdì %d", id(homeassistant_time).now());
         }
