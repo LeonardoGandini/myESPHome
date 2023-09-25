@@ -57,7 +57,7 @@ time:
             condition:
               lambda: 'return id(binariodiprova).state;'
             then:
-              - logger.log: "Bella lì, c'è qualcuno!"
+              - logger.log: "Bella lì, c’è qualcuno!"
               - script.execute: update_screen
             else:
               - logger.log: "nopanda"
@@ -340,17 +340,17 @@ display:
         int pollo = 0;
 
         if (id(bin_waste_garden).state) {
-          it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Giardino");
+          it.printf(Ycenter, giardH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c’è la raccolta Giardino");
           int pollo = 1;
         }
         if (id(bin_waste_food).state) {
-          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Umido");
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c’è la raccolta Umido");
         }
          if (id(bin_waste_grey).state) {
-          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Generico");
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c’è la raccolta Generico");
         }
         if (id(bin_waste_green).state) {
-          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c'è la raccolta Riciclo");
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Domani c’è la raccolta Riciclo");
         }
 
 
@@ -360,7 +360,7 @@ display:
 
 
         if (id(cal_food).state) {
-          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono l'umido");
+          it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono l’umido");
         }
         if (id(cal_grey).state){
           it.printf(Ycenter, spazzaH, id(font_spazza), COLOR_ON, TextAlign::CENTER, "Oggi raccolgono il generico");
