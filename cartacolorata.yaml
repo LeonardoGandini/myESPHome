@@ -1,7 +1,11 @@
 esphome:
   name: cartacolorata
   friendly_name: CartaColorata
-
+  on_boot:
+    priority: -10
+    then:
+      - delay: 10s
+      - component.update: epaper  
 esp32:
   board: esp32dev
   framework:
@@ -22,10 +26,12 @@ color:
     blue: 0%
     white: 0%
 
-# Enable logging
 logger:
 
-# Enable Home Assistant API
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password    
+
 api:
   encryption:
     key: "fhuf1ReMRgfyFUiekMzc3tdyulSaiT1L9sSJ2Sfw0lI="
@@ -38,20 +44,26 @@ spi:
   mosi_pin: GPIO14
   id: epaper_display
 
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+time:
+- platform: homeassistant
+  id: homeassistant_time
+  timezone: Europe/London
+  on_time:
+    - seconds: 0
+      minutes: /25
+      then:
+        - component.update: epaper
 
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Cartacolorata Fallback Hotspot"
-    password: "E9xstk9ynS0Z"
-font:
-  - file: 'fonts/Itim-Regular.ttf'
-    id: font_provola
-    size: 45
 
-captive_portal:
+
+sun:
+  latitude: !secret my_lat
+  longitude: !secret my_long
+
+json:
+
+<<: !include .sensors.yaml
+<<: !include .fonts.yaml
 
 display:
   - platform: waveshare_epaper
@@ -62,12 +74,296 @@ display:
     reset_pin: GPIO26
     model: 7.50in-bv2
     rotation: 90
-    update_interval: 150s
+    update_interval: never
     reset_duration: 4ms
 
     lambda: |-
       //ESP_LOGI("display", "Updating...");
+
       it.fill(COLOR_ON);
+
+      float livingroomtemp = id(livingroom_temp).state;
+      float livingroomhum = id(livingroom_hum).state;
+      float guestbedtemp = id(guestbed_temp).state;
+      float guestbedhum = id(guestbed_hum).state;
+      float kitchtemp = id(kitchen_temp).state;
+      float kitchhum = id(kitchen_hum).state;
+      float mastbedtemp = id(mastbed_temp).state;
+      float mastbedhum = id(mastbed_hum).state;
+      float attictemp = id(attic_temp).state;
+      float attichum = id(attic_hum).state;
+      float servertemp = id(server_temp).state;
+      float serverhum = id(server_hum).state;
+      float lgstudiotemp = id(lgstudio_temp).state;
+      float lgstudiohum = id(lgstudio_hum).state;
+      float alstudiotemp = id(alstudio_temp).state;
+      float alstudiohum = id(alstudio_hum).state;
+
+      float wind_now = id(windnow).state;
+      float temp_now = id(tempnow).state;
+
+      float storm_d0 = id(stormd0).state;
+      float storm_d1 = id(stormd1).state;
+      float storm_d2 = id(stormd2).state;
+
+      std::string icolivingroom = "\U000F156D";
+      std::string icoguestbed = "\U000F01E6";
+      std::string icokitch = "\U000F181D";
+      std::string icomastbed = "\U000F0FD1";
+      std::string icoattic = "\U000F112B";
+      std::string icoserver = "\U000F1087";      
+      std::string icolgstudio = "\U000F0AAB";
+      std::string icoalstudio = "\U000F0322";
+
+      std::string icotemp = "\U000F050F";
+      std::string icohum = "\U000F058E";
+      std::string icowind = "\U000F059D";
+
+      std::string icosunup = "\U000F059C";
+      std::string icosundown = "\U000F059B";
+      
+      std::string sunrise = id(sunrise_hour).state;
+      std::string sunset = id(sunset_hour).state;
+
+      std::string icostorm = "\U000F067E";
+      
+      std::map<std::string, std::string> weather_icon_state {
+          {"cloudy", "\U000F0590"},
+          {"clear-day", "\U000F0599"},
+          {"clear-night", "\U000F0594"},
+          {"fog", "\U000F0591"},
+          {"hail", "\U000F0592"},
+          {"lightning", "\U000F0593"},
+          {"lightning-rainy", "\U000F067E"},
+          {"partlycloudy", "\U000F0595"},
+          {"pouring", "\U000F0596"},
+          {"rainy", "\U000F0597"},
+          {"snowy", "\U000F0598"},
+          {"snowy-rainy", "\U000F067F"},
+          {"sunny", "\U000F0599"},
+          {"sunset-down", "\U000F059B"},
+          {"sunset-up", "\U000F059C"},
+          {"windy", "\U000F059D"},
+          {"windy-variant", "\U000F059E"}
+      };
+
       int Ycenter = 240;
-      it.printf(Ycenter, 450, id(font_provola), COLOR_OFF, TextAlign::CENTER, "Sono Balordo");
-      it.printf(Ycenter, 550, id(font_provola), COLOR_RED, TextAlign::CENTER, "Sono Balorda");
+      int jawY = 725;
+      int enwY = 365;
+      int grid_thick = 2;
+
+      int gridV1 = 60;
+      int gridV2 = 180;
+      int gridV3 = 300;
+      int gridV4 = 420;
+
+      int gridH1 = 40;
+      int gridH2 = 240;
+
+      int temp_ico_h1 = 90;
+      int temp_txt_h1 = 120; 
+      int hum_ico_h1 = 150;
+      int hum_txt_h1 = 180;
+
+      int temp_ico_h2 = 290;
+      int temp_txt_h2 = 320;
+      int hum_ico_h2 = 350;
+      int hum_txt_h2 = 380;
+
+
+      //GRID
+      it.filled_rectangle(0, 0, 480, grid_thick, COLOR_OFF);
+      it.filled_rectangle(0, 200, 480, grid_thick, COLOR_OFF);
+      it.filled_rectangle(0, 400, 480, grid_thick, COLOR_OFF);
+
+      it.filled_rectangle(0, 0, grid_thick, 400, COLOR_OFF);
+      it.filled_rectangle(120, 0, grid_thick, 400, COLOR_OFF);
+      it.filled_rectangle(Ycenter, 0, grid_thick, 400, COLOR_OFF);
+      it.filled_rectangle(360, 0, grid_thick, 400, COLOR_OFF);
+      it.filled_rectangle(477, 0,  grid_thick, 400, COLOR_OFF);
+
+      it.filled_rectangle(160, 420, grid_thick, 230, COLOR_OFF);
+      it.filled_rectangle(320, 420, grid_thick, 230, COLOR_OFF);
+
+      //Living Room
+      it.printf(gridV1, gridH1, id(icon_font), COLOR_RED, TextAlign::CENTER , icolivingroom.c_str());
+      it.printf(gridV1, temp_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV1, temp_txt_h1, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", livingroomtemp);
+      it.printf(gridV1, hum_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV1, hum_txt_h1, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", livingroomhum);
+
+      //Gym
+      it.printf(gridV2, gridH1, id(icon_font), COLOR_RED, TextAlign::CENTER , icoguestbed.c_str());
+      it.printf(gridV2, temp_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV2, temp_txt_h1, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", guestbedtemp);
+      it.printf(gridV2, hum_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV2, hum_txt_h1, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", guestbedhum);
+
+      //Kitchen
+      it.printf(gridV3, gridH1, id(icon_font), COLOR_RED, TextAlign::CENTER , icokitch.c_str());
+      it.printf(gridV3, temp_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV3, temp_txt_h1, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", kitchtemp);
+      it.printf(gridV3, hum_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV3, hum_txt_h1, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", kitchhum);      
+
+      //Master Bedroom
+      it.printf(gridV4, gridH1, id(icon_font), COLOR_RED, TextAlign::CENTER , icomastbed.c_str());
+      it.printf(gridV4, temp_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV4, temp_txt_h1, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", mastbedtemp);      
+      it.printf(gridV4, hum_ico_h1, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV4, hum_txt_h1, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", mastbedhum);
+
+      //Attic
+      it.printf(gridV1, gridH2, id(icon_font), COLOR_RED, TextAlign::CENTER , icoattic.c_str());
+      it.printf(gridV1, temp_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV1, temp_txt_h2, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", attictemp);
+      it.printf(gridV1, hum_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV1, hum_txt_h2, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", attichum);
+
+      //Server
+      it.printf(gridV2, gridH2 - 6, id(icon_font), COLOR_RED, TextAlign::CENTER , icoserver.c_str());
+      it.printf(gridV2, temp_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV2, temp_txt_h2, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", servertemp);
+      it.printf(gridV2, hum_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV2, hum_txt_h2, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", serverhum);
+
+      //LG studio
+      it.printf(gridV3, gridH2, id(icon_font), COLOR_RED, TextAlign::CENTER , icolgstudio.c_str());
+      it.printf(gridV3, temp_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV3, temp_txt_h2, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", lgstudiotemp);  
+      it.printf(gridV3, hum_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV3, hum_txt_h2, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", lgstudiohum);
+
+      //AL Studio
+      it.printf(gridV4, gridH2, id(icon_font), COLOR_RED, TextAlign::CENTER , icoalstudio.c_str());
+      it.printf(gridV4, temp_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icotemp.c_str());
+      it.printf(gridV4, temp_txt_h2, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.1f°C", alstudiotemp);
+      it.printf(gridV4, hum_ico_h2, id(icon_font_small), COLOR_OFF, TextAlign::CENTER , icohum.c_str());
+      it.printf(gridV4, hum_txt_h2, id(font_regular), COLOR_OFF, TextAlign::CENTER , "%.1f%%", alstudiohum);
+
+      
+      //weather
+      int stormvalue = 25;
+
+      int weath_ico1 = 465;
+      int weath_txt1 = 530;
+      int weath_ico2 = 570;
+      int weath_txt2 = 605;
+
+      if (storm_d0 >= stormvalue || storm_d1 >= stormvalue || storm_d2 >= stormvalue){
+        int weath_ico1 = 455;
+        int weath_txt1 = 520;
+        int weath_ico2 = 600;
+        int weath_txt2 = 635;
+      }
+  
+      DynamicJsonDocument doc(2048);
+      deserializeJson(doc, (id(accuweatherfore).state.c_str()));
+      JsonArray root = doc.as<JsonArray>();
+
+      JsonObject root_0 = root[0];
+      JsonObject root_1 = root[1];
+      JsonObject root_2 = root[2];
+      std::string root_0_condition = root_0["condition"];
+      std::string root_1_condition = root_1["condition"];
+      std::string root_2_condition = root_2["condition"];
+      float root_0_temperature = root_0["temperature"];
+      float root_1_temperature = root_1["temperature"];
+      float root_2_temperature = root_2["temperature"];
+
+      float root_0_wind = root_0["wind_speed"];
+      float root_1_wind = root_1["wind_speed"];
+      float root_2_wind = root_2["wind_speed"];
+
+      float root_1_templow = root_1["templow"];
+      float root_2_templow = root_2["templow"];
+
+      int windshift = 15;
+
+      //Day0
+      it.printf(80, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[root_0_condition.c_str()].c_str());          
+      it.printf(80, weath_txt1 - 5, id(font_date), COLOR_OFF, TextAlign::CENTER, "%.1f°C", temp_now);
+    
+      it.printf(80, weath_ico2+windshift, id(wind_font), COLOR_OFF, TextAlign::CENTER, icowind.c_str()); 
+      it.printf(80, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", wind_now);
+
+      //Day1
+      it.printf(240, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[root_1_condition.c_str()].c_str());
+      it.printf(240, weath_ico1+60, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.0f°  %.0f°", root_1_templow, root_1_temperature);
+
+      it.printf(240, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", root_1_wind);
+      it.printf(240, weath_ico2+windshift, id(wind_font), COLOR_OFF, TextAlign::CENTER, icowind.c_str()); 
+      
+      //Day 2
+      it.printf(400, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[root_2_condition.c_str()].c_str());
+      it.printf(400, weath_ico1+60, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.0f°  %.0f°", root_2_templow, root_2_temperature);
+
+      it.printf(400, weath_ico2+windshift, id(wind_font), COLOR_OFF, TextAlign::CENTER, icowind.c_str());
+      it.printf(400, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", root_2_wind);
+
+      //Lower Separator
+      it.filled_rectangle(40, 660, 400, 3, COLOR_OFF);
+
+      //Date
+      it.strftime(100, 685 , id(font_date), COLOR_OFF, TextAlign::CENTER, "%B", id(homeassistant_time).now());
+      it.strftime(100, 730 , id(font_date_big), COLOR_RED, TextAlign::CENTER, "%d", id(homeassistant_time).now());
+      it.strftime(100, 775 , id(font_date), COLOR_OFF, TextAlign::CENTER, "%A", id(homeassistant_time).now());
+
+      //Time
+      //it.strftime(378, 730 , id(clockfont), COLOR_OFF, TextAlign::CENTER, "%H:%M", id(homeassistant_time).now());
+
+      //SUN
+      it.printf(330, 710, id(sun_font), COLOR_OFF, TextAlign::CENTER , icosunup.c_str());
+      it.printf(400, 705, id(font_date), COLOR_OFF, TextAlign::CENTER, "%s", sunrise.c_str());
+
+      it.printf(330, 770, id(sun_font), COLOR_OFF, TextAlign::CENTER , icosundown.c_str());
+      it.printf(400, 765, id(font_date), COLOR_OFF, TextAlign::CENTER, "%s", sunset.c_str());
+
+      //Storm
+      if (storm_d0 >= stormvalue){
+        it.filled_rectangle(20, weath_ico2 - 65, 125, 40, COLOR_RED);
+        it.printf(50, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
+        it.printf(100, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d0);
+      }
+      if (storm_d1 >= stormvalue){
+        it.filled_rectangle(180, weath_ico2 - 65, 125, 40, COLOR_RED);
+        it.printf(210, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
+        it.printf(260, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d1);      
+      }
+      if (storm_d2 >= stormvalue){
+        it.filled_rectangle(340, weath_ico2 - 65, 125, 40, COLOR_RED);
+        it.printf(370, weath_ico2 - 45, id(icon_font_storm), COLOR_OFF, TextAlign::CENTER , icostorm.c_str());
+        it.printf(420, weath_ico2 - 45, id(font_bold), COLOR_OFF, TextAlign::CENTER , "%.0f%%", storm_d2);     
+      }  
+      
+      //丸曜日
+      //it.filled_circle(Ycenter, 730, 50);
+      if (id(homeassistant_time).now().day_of_week == 1 || id(homeassistant_time).now().day_of_week == 7){ 
+        it.filled_circle(Ycenter, 730, 50, COLOR_RED);
+      }
+      else{
+        it.circle(Ycenter, 730, 50, COLOR_OFF);
+      }
+      //何曜日？
+      auto time_now = id(homeassistant_time).now().day_of_week;
+        if (id(homeassistant_time).now().day_of_week == 1){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_ON, TextAlign::CENTER, "日");
+        }      
+        if (id(homeassistant_time).now().day_of_week == 2){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_RED, TextAlign::CENTER, "月");
+        }
+        if (id(homeassistant_time).now().day_of_week == 3){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_RED, TextAlign::CENTER, "火");
+        }      
+        if (id(homeassistant_time).now().day_of_week == 4){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_RED, TextAlign::CENTER, "水");
+        }
+        if (id(homeassistant_time).now().day_of_week == 5){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_RED, TextAlign::CENTER, "木");
+        }      
+        if (id(homeassistant_time).now().day_of_week == 6){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_RED, TextAlign::CENTER, "金");
+        }
+        if (id(homeassistant_time).now().day_of_week == 7){ 
+          it.printf(Ycenter, jawY, id(jaweekfont), COLOR_ON, TextAlign::CENTER, "土");
+        }
