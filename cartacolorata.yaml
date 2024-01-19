@@ -1,0 +1,73 @@
+esphome:
+  name: cartacolorata
+  friendly_name: CartaColorata
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/X4LD1M0/esphome
+      ref: waveshare-color
+    components: [ waveshare_epaper ]
+    refresh: 0s
+
+color:
+  - id: COLOR_RED
+    red: 100%
+    green: 0%
+    blue: 0%
+    white: 0%
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "fhuf1ReMRgfyFUiekMzc3tdyulSaiT1L9sSJ2Sfw0lI="
+
+ota:
+  password: "8c93d5a9c4c8be94ad54b719b1cfad7e"
+
+spi:
+  clk_pin: GPIO13
+  mosi_pin: GPIO14
+  id: epaper_display
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Cartacolorata Fallback Hotspot"
+    password: "E9xstk9ynS0Z"
+font:
+  - file: 'fonts/Itim-Regular.ttf'
+    id: font_provola
+    size: 45
+
+captive_portal:
+
+display:
+  - platform: waveshare_epaper
+    id: epaper  
+    cs_pin: GPIO15
+    dc_pin: GPIO27
+    busy_pin: GPIO25
+    reset_pin: GPIO26
+    model: 7.50in-bv2
+    rotation: 90
+    update_interval: 150s
+    reset_duration: 4ms
+
+    lambda: |-
+      //ESP_LOGI("display", "Updating...");
+      it.fill(COLOR_ON);
+      int Ycenter = 240;
+      it.printf(Ycenter, 450, id(font_provola), COLOR_OFF, TextAlign::CENTER, "Sono Balordo");
+      it.printf(Ycenter, 550, id(font_provola), COLOR_RED, TextAlign::CENTER, "Sono Balorda");
