@@ -263,27 +263,28 @@ display:
       float root_1_templow = root_1["templow"];
       float root_2_templow = root_2["templow"];
 
+      int windshift = 15;
       
       //Day0
       it.printf(80, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_0_condition.c_str()].c_str());          
       it.printf(80, weath_txt1 - 5, id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
     
-      it.printf(80, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
-      it.printf(80, weath_txt2 , id(font_bold), TextAlign::CENTER, "%.1f kmh", wind_now);
+      it.printf(80, weath_ico2+windshift, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
+      it.printf(80, weath_txt2+windshift, id(font_bold), TextAlign::CENTER, "%.1f kmh", wind_now);
 
       //Day1
       it.printf(240, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_1_condition.c_str()].c_str());
       it.printf(240, weath_ico1+60, id(font_bold), TextAlign::CENTER, "%.0f° - %.0f°", root_1_templow, root_1_temperature);
 
-      it.printf(240, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_1_wind);
-      it.printf(240, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
+      it.printf(240, weath_txt2+windshift, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_1_wind);
+      it.printf(240, weath_ico2+windshift, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
       
       //Day 2
       it.printf(400, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[root_2_condition.c_str()].c_str());
       it.printf(400, weath_ico1+60, id(font_bold), TextAlign::CENTER, "%.0f° - %.0f°", root_2_templow, root_2_temperature);
 
-      it.printf(400, weath_ico2, id(wind_font), TextAlign::CENTER, icowind.c_str());
-      it.printf(400, weath_txt2, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_2_wind);
+      it.printf(400, weath_ico2+windshift, id(wind_font), TextAlign::CENTER, icowind.c_str());
+      it.printf(400, weath_txt2+windshift, id(font_bold), TextAlign::CENTER, "%.1f kmh", root_2_wind);
 
       //Lower Separator
       it.filled_rectangle(40, 660, 400, 3, COLOR_ON);
