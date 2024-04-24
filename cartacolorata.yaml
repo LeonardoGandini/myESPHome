@@ -34,10 +34,10 @@ wifi:
 
 api:
   encryption:
-    key: "fhuf1ReMRgfyFUiekMzc3tdyulSaiT1L9sSJ2Sfw0lI="
+    key: !secret credapi
 
 ota:
-  password: "8c93d5a9c4c8be94ad54b719b1cfad7e"
+  password: !secret credota
 
 spi:
   clk_pin: GPIO13
@@ -256,50 +256,41 @@ display:
         int weath_ico2 = 600;
         int weath_txt2 = 635;
       }
-  
-      DynamicJsonDocument doc(2048);
-      deserializeJson(doc, (id(accuweatherfore).state.c_str()));
-      JsonArray root = doc.as<JsonArray>();
-
-      JsonObject root_0 = root[0];
-      JsonObject root_1 = root[1];
-      JsonObject root_2 = root[2];
-      std::string root_0_condition = root_0["condition"];
-      std::string root_1_condition = root_1["condition"];
-      std::string root_2_condition = root_2["condition"];
-      float root_0_temperature = root_0["temperature"];
-      float root_1_temperature = root_1["temperature"];
-      float root_2_temperature = root_2["temperature"];
-
-      float root_0_wind = root_0["wind_speed"];
-      float root_1_wind = root_1["wind_speed"];
-      float root_2_wind = root_2["wind_speed"];
-
-      float root_1_templow = root_1["templow"];
-      float root_2_templow = root_2["templow"];
 
       int windshift = 15;
 
+      float fore_neo_min1 = id(foreneomin1).state;
+      float fore_neo_max1 = id(foreneomax1).state;
+      float fore_neo_wind1 = id(foreneowind1).state;
+      float fore_neo_min2 = id(foreneomin2).state;
+      float fore_neo_max2 = id(foreneomax2).state;
+      float fore_neo_wind2 = id(foreneowind2).state;    
+
+
+      std::string weathday1condition = id(accucond1).state;
+      std::string weathday2condition = id(accucond2).state;
+      std::string weathday3condition = id(accucond3).state;
+
       //Day0
-      it.printf(80, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[root_0_condition.c_str()].c_str());          
+      it.printf(80, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[weathday1condition.c_str()].c_str());          
       it.printf(80, weath_txt1 - 5, id(font_date), COLOR_OFF, TextAlign::CENTER, "%.1f°C", temp_now);
     
       it.printf(80, weath_ico2+windshift, id(wind_font), COLOR_OFF, TextAlign::CENTER, icowind.c_str()); 
       it.printf(80, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", wind_now);
 
       //Day1
-      it.printf(240, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[root_1_condition.c_str()].c_str());
-      it.printf(240, weath_ico1+60, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.0f°  %.0f°", root_1_templow, root_1_temperature);
+      it.printf(240, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[weathday2condition.c_str()].c_str());
+      it.printf(240, weath_ico1+60, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.0f°  %.0f°", fore_neo_min1, fore_neo_max1);
 
-      it.printf(240, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", root_1_wind);
+      it.printf(240, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", fore_neo_wind1);
       it.printf(240, weath_ico2+windshift, id(wind_font), COLOR_OFF, TextAlign::CENTER, icowind.c_str()); 
       
       //Day 2
-      it.printf(400, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[root_2_condition.c_str()].c_str());
-      it.printf(400, weath_ico1+60, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.0f°  %.0f°", root_2_templow, root_2_temperature);
+      it.printf(400, weath_ico1, id(weather_font_85), COLOR_RED, TextAlign::CENTER, "%s", weather_icon_state[weathday3condition.c_str()].c_str());
+      it.printf(400, weath_ico1+60, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.0f°  %.0f°", fore_neo_min2, fore_neo_max2);
 
       it.printf(400, weath_ico2+windshift, id(wind_font), COLOR_OFF, TextAlign::CENTER, icowind.c_str());
-      it.printf(400, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", root_2_wind);
+      it.printf(400, weath_txt2+windshift, id(font_bold), COLOR_OFF, TextAlign::CENTER, "%.1f kmh", fore_neo_wind2);
 
       //Lower Separator
       it.filled_rectangle(40, 660, 400, 3, COLOR_OFF);

@@ -1,0 +1,120 @@
+sensor:
+
+  - platform: homeassistant
+    entity_id: sensor.weather_armeno_temperature
+    id: temp_armeno
+
+  - platform: homeassistant
+    entity_id: sensor.weather_rapallo_temperature
+    id: temp_rapallo
+
+  - platform: homeassistant
+    entity_id: sensor.weather_edinburgh_temperature
+    id: temp_edinburgh
+    
+  - platform: homeassistant
+    entity_id: sensor.weather_armeno_wind_speed
+    id: wind_armeno
+
+  - platform: homeassistant
+    entity_id: sensor.weather_rapallo_wind_speed
+    id: wind_rapallo
+
+  - platform: homeassistant
+    entity_id: sensor.weather_edinburgh_wind_speed
+    id: wind_edinburgh    
+    
+  - platform: homeassistant
+    entity_id: sensor.sun_next_rising
+    id: sunrising
+  - platform: homeassistant
+    entity_id: sensor.sun_next_setting
+    id: sunsetting
+
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_realfeel_temperature_min_day_1
+    id: foremind1
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_realfeel_temperature_min_day_2
+    id: foremind2
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_realfeel_temperature_max_day_1
+    id: foremaxd1
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_realfeel_temperature_max_day_2
+    id: foremaxd2
+
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_wind_speed_day_1
+    id: forewindd1
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_wind_speed_day_2
+    id: forewindd2
+
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_wind_speed
+    id: windnow
+  - platform: homeassistant
+    entity_id: sensor.hamilanes_realfeel_temperature
+    id: tempnow
+
+text_sensor:
+
+  - platform: homeassistant
+    entity_id: weather.hamilanes
+    id: weathernow
+
+  - platform: homeassistant
+    entity_id: weather.hamilanes
+    attribute: forecast
+    id: accuweatherfore
+    internal: yes
+
+  - platform: sun
+    type: sunrise
+    format: "%H:%M"
+    id: sunrise_hour
+  - platform: sun
+    type: sunset
+    format: "%H:%M"
+    id: sunset_hour
+
+  - platform: homeassistant
+    entity_id: weather.weather_edinburgh
+    attribute: forecast
+    internal: yes    
+    id: weather_edinburgh
+
+  - platform: homeassistant
+    entity_id: weather.weather_armeno
+    attribute: forecast
+    internal: yes        
+    id: weather_armeno
+
+  - platform: homeassistant
+    entity_id: weather.weather_rapallo
+    attribute: forecast
+    internal: yes        
+    id: weather_rapallo
+
+  - platform: homeassistant
+    entity_id: sensor.accuweather_condition_kyou
+    id: accucond1
+  - platform: homeassistant
+    entity_id: sensor.accuweather_condition_ashita
+    id: accucond2
+  - platform: homeassistant
+    entity_id: sensor.accuweather_condition_asatte
+    id: accucond3
+
+  - platform: homeassistant
+    entity_id: sensor.weather_armeno_condition
+    id: armenocondneo    
+
+  - platform: homeassistant
+    entity_id: sensor.weather_edinburgh_condition
+    id: edicondneo    
+
+  - platform: homeassistant
+    entity_id: sensor.weather_rapallo_condition
+    id: rapallocondneo    
