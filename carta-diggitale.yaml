@@ -4,8 +4,9 @@ esphome:
   on_boot:
     priority: -10
     then:
-      - delay: 10s
-      - component.update: epaper  
+      #- delay: 10s
+      #- component.update: epaper
+      - display.page.show: page3
 esp32:
   board: esp32dev
   framework:
@@ -35,9 +36,10 @@ time:
   timezone: Europe/London
   on_time:
     - seconds: 0
-      minutes: /2
+      minutes: /25
       then:
         #- display.page.show_next: epaper
+        - display.page.show: page3
         - component.update: epaper
 
 
@@ -92,45 +94,45 @@ display:
           float storm_d1 = id(stormd1).state;
           float storm_d2 = id(stormd2).state;
 
-          std::string icolivingroom = "\U000F156D";
-          std::string icoguestbed = "\U000F01E6";
-          std::string icokitch = "\U000F181D";
-          std::string icomastbed = "\U000F0FD1";
-          std::string icoattic = "\U000F112B";
-          std::string icoserver = "\U000F1087";      
-          std::string icolgstudio = "\U000F0AAB";
-          std::string icoalstudio = "\U000F0322";
+          std::string icolivingroom = "\uf4b8";
+          std::string icoguestbed = "\uf44b";
+          std::string icokitch = "\ue51a";
+          std::string icomastbed = "\uf8f7";
+          std::string icoattic = "\uf7d9";
+          std::string icoserver = "\uf233";      
+          std::string icolgstudio = "\ue4e5";
+          std::string icoalstudio = "\uf109";
 
-          std::string icotemp = "\U000F050F";
-          std::string icohum = "\U000F058E";
-          std::string icowind = "\U000F059D";
+          std::string icotemp = "\uf2ca";
+          std::string icohum = "\uf750";
+          std::string icowind = "\uf72e";
 
-          std::string icosunup = "\U000F059C";
-          std::string icosundown = "\U000F059B";
+          std::string icosunup = "\uf766";
+          std::string icosundown = "\uf767";
           
           std::string sunrise = id(sunrise_hour).state;
           std::string sunset = id(sunset_hour).state;
 
-          std::string icostorm = "\U000F067E";
+          std::string icostorm = "\uf76c";
           
           std::map<std::string, std::string> weather_icon_state {
-              {"cloudy", "\U000F0590"},
-              {"clear-day", "\U000F0599"},
-              {"clear-night", "\U000F0594"},
-              {"fog", "\U000F0591"},
-              {"hail", "\U000F0592"},
-              {"lightning", "\U000F0593"},
-              {"lightning-rainy", "\U000F067E"},
-              {"partlycloudy", "\U000F0595"},
-              {"pouring", "\U000F0596"},
-              {"rainy", "\U000F0597"},
-              {"snowy", "\U000F0598"},
-              {"snowy-rainy", "\U000F067F"},
-              {"sunny", "\U000F0599"},
-              {"sunset-down", "\U000F059B"},
-              {"sunset-up", "\U000F059C"},
-              {"windy", "\U000F059D"},
-              {"windy-variant", "\U000F059E"}
+              {"cloudy", "\uf744"},
+              {"clear-day", "\uf185"},
+              {"clear-night", "\uf762"},
+              {"fog", "\uf74e"},
+              {"hail", "\uf739"},
+              {"lightning", "\uf76c"},
+              {"lightning-rainy", "\uf76e"},
+              {"partly-cloudy-day", "\uf763"},
+              {"pouring", "\uf740"},
+              {"rain", "\uf73f"},
+              {"snowy", "\uf2dc"},
+              {"snowy-rainy", "\uf73d"},
+              {"sunny", "\uf185"},
+              {"sunset-down", "\uf767"},
+              {"sunset-up", "\uf766"},
+              {"windy", "\uf777"},
+              {"windy-variant", "\uf6f4"}
           };
 
           int Ycenter = 240;
@@ -240,40 +242,38 @@ display:
             int weath_ico1 = 455;
             int weath_txt1 = 520;
             int weath_ico2 = 600;
-            int weath_txt2 = 635;
+            int weath_txt2 = 640;
           }
       
+          int windshift = 13;
 
-          int windshift = 15;
+          float fore_neo_min1 = id(pwday1mintemp).state;
+          float fore_neo_max1 = id(pwday1maxtemp).state;
+          float fore_neo_wind1 = id(pwday1wind).state;
+          float fore_neo_min2 = id(pwday2mintemp).state;
+          float fore_neo_max2 = id(pwday2maxtemp).state;
+          float fore_neo_wind2 = id(pwday2wind).state;    
 
-          float fore_neo_min1 = id(foreneomin1).state;
-          float fore_neo_max1 = id(foreneomax1).state;
-          float fore_neo_wind1 = id(foreneowind1).state;
-          float fore_neo_min2 = id(foreneomin2).state;
-          float fore_neo_max2 = id(foreneomax2).state;
-          float fore_neo_wind2 = id(foreneowind2).state;    
-
-
-          std::string weathday1condition = id(accucond1).state;
-          std::string weathday2condition = id(accucond2).state;
-          std::string weathday3condition = id(accucond3).state;
+          std::string weathday1condition = id(pwtodayicon).state;
+          std::string weathday2condition = id(pwday1icon).state;
+          std::string weathday3condition = id(pwday2icon).state;
 
           //Day0
-          it.printf(80, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weathday1condition.c_str()].c_str());          
+          it.printf(80, weath_ico1, id(weather_font_big), TextAlign::CENTER, "%s", weather_icon_state[weathday1condition.c_str()].c_str());          
           it.printf(80, weath_txt1 - 5, id(font_date), TextAlign::CENTER, "%.1f°C", temp_now);
         
           it.printf(80, weath_ico2+windshift, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
           it.printf(80, weath_txt2+windshift, id(font_bold), TextAlign::CENTER, "%.1f kmh", wind_now);
 
           //Day1        
-          it.printf(240, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weathday2condition.c_str()].c_str());
+          it.printf(240, weath_ico1, id(weather_font_big), TextAlign::CENTER, "%s", weather_icon_state[weathday2condition.c_str()].c_str());
           it.printf(240, weath_ico1+60, id(font_bold), TextAlign::CENTER, "%.0f° - %.0f°", fore_neo_min1, fore_neo_max1);
 
           it.printf(240, weath_txt2+windshift, id(font_bold), TextAlign::CENTER, "%.1f kmh", fore_neo_wind1);
           it.printf(240, weath_ico2+windshift, id(wind_font), TextAlign::CENTER, icowind.c_str()); 
           
           //Day 2
-          it.printf(400, weath_ico1, id(weather_font_85), TextAlign::CENTER, "%s", weather_icon_state[weathday3condition.c_str()].c_str());
+          it.printf(400, weath_ico1, id(weather_font_big), TextAlign::CENTER, "%s", weather_icon_state[weathday3condition.c_str()].c_str());
           it.printf(400, weath_ico1+60, id(font_bold), TextAlign::CENTER, "%.0f° - %.0f°", fore_neo_min2, fore_neo_max2);
 
           it.printf(400, weath_ico2+windshift, id(wind_font), TextAlign::CENTER, icowind.c_str());
@@ -291,10 +291,10 @@ display:
 
           //SUN
           it.printf(330, 710, id(sun_font), TextAlign::CENTER , icosunup.c_str());
-          it.printf(400, 705, id(font_date), TextAlign::CENTER, "%s", sunrise.c_str());
+          it.printf(400, 710, id(font_date), TextAlign::CENTER, "%s", sunrise.c_str());
 
           it.printf(330, 770, id(sun_font), TextAlign::CENTER , icosundown.c_str());
-          it.printf(400, 765, id(font_date), TextAlign::CENTER, "%s", sunset.c_str());
+          it.printf(400, 770, id(font_date), TextAlign::CENTER, "%s", sunset.c_str());
 
           //Storm
           if (storm_d0 >= stormvalue){
@@ -348,3 +348,115 @@ display:
         lambda: |-
           //ESP_LOGI("display", "Updating...");
           it.printf(240, 450, id(font_date), TextAlign::CENTER, "Te se propi un pirla");
+
+      - id: page3
+        lambda: |-
+
+          std::map<std::string, std::string> moonPhaseMap = {
+              {"first_quarter", "First Quarter"},
+              {"full_moon", "Full Moon!"},
+              {"last_quarter", "Last Quarter"},
+              {"new_moon", "New Moon!"},
+              {"waning_crescent", "Waning Crescent"},
+              {"waning_gibbous", "Waning Gibbous"},
+              {"waxing_crescent", "Waxing Crescent"},
+              {"waxing_gibbous", "Waxing Gibbous"}
+          };
+
+          float pw_moon_d0 = id(pwmoond0).state;
+          float pw_moon_d1 = id(pwmoond1).state;
+          float pw_moon_d2 = id(pwmoond2).state;
+    
+          // Define the moon phases and corresponding characters/strings
+          std::map<double, std::pair<char, std::string>> moonPhases;
+
+          // New Moon: Range from 0.00 to 0.125
+          moonPhases[0.00] = {'+', "New Moon"};
+          for (double phase = 0.001; phase <= 0.125; phase += 0.001) {
+              moonPhases[phase] = {'+', "New Moon"};
+          }
+
+          // Waxing Crescent: Range from 0.125 to 0.25
+          for (double phase = 0.126; phase <= 0.25; phase += 0.001) {
+              moonPhases[phase] = {'q', "Waxing Crescent"};
+          }
+
+          // First Quarter: Range from 0.25 to 0.375
+          for (double phase = 0.251; phase <= 0.375; phase += 0.001) {
+              moonPhases[phase] = {'t', "First Quarter"};
+          }
+
+          // Waxing Gibbous: Range from 0.375 to 0.50
+          for (double phase = 0.376; phase <= 0.50; phase += 0.001) {
+              moonPhases[phase] = {'v', "Waxing Gibbous"};
+          }
+
+          // Full Moon: Range from 0.50 to 0.625
+          for (double phase = 0.501; phase <= 0.625; phase += 0.001) {
+              moonPhases[phase] = {'@', "Full Moon"};
+          }
+
+          // Waning Gibbous: Range from 0.625 to 0.75
+          for (double phase = 0.626; phase <= 0.75; phase += 0.001) {
+              moonPhases[phase] = {'d', "Waning Gibbous"};
+          }
+
+          // Last Quarter: Range from 0.75 to 0.875
+          for (double phase = 0.751; phase <= 0.875; phase += 0.001) {
+              moonPhases[phase] = {'g', "Last Quarter"};
+          }
+
+          // Waning Crescent: Range from 0.875 to 1.00
+          for (double phase = 0.876; phase <= 1.00; phase += 0.001) {
+              moonPhases[phase] = {'i', "Waning Crescent"};
+          }
+
+          // Assuming moonPhaseValueA, moonPhaseValueB, and moonPhaseValueC are the current moon phase values
+          double moonPhaseValueA = pw_moon_d0;
+          double moonPhaseValueB = pw_moon_d1;
+          double moonPhaseValueC = pw_moon_d2;
+
+          // Finding the closest moon phase for each value
+          auto closestPhaseA = moonPhases.lower_bound(moonPhaseValueA);
+          auto closestPhaseB = moonPhases.lower_bound(moonPhaseValueB);
+          auto closestPhaseC = moonPhases.lower_bound(moonPhaseValueC);
+
+          // Displaying the corresponding letters and strings
+          char moonPhaseLetterA = closestPhaseA->second.first;
+          std::string moonPhaseStringA = closestPhaseA->second.second;
+
+          char moonPhaseLetterB = closestPhaseB->second.first;
+          std::string moonPhaseStringB = closestPhaseB->second.second;
+
+          char moonPhaseLetterC = closestPhaseC->second.first;
+          std::string moonPhaseStringC = closestPhaseC->second.second;
+
+
+          std::string moon_phase = id(moonphase).state;         
+
+          //it.printf(240, 150, id(font_date), TextAlign::CENTER, "%.2f, %c, %s", moonPhaseValueA, moonPhaseLetterA, moonPhaseStringA.c_str());
+          //it.printf(240, 250, id(moon_font_big), TextAlign::CENTER, "%c", moonPhaseLetterA);
+          //it.circle(240, 250, 50);
+
+          //it.printf(240, 350, id(font_date), TextAlign::CENTER, "%.2f, %c, %s", moonPhaseValueB, moonPhaseLetterB, moonPhaseStringB.c_str());
+          //it.printf(240, 450, id(moon_font), TextAlign::CENTER, "%c", moonPhaseLetterB);
+          //it.circle(240, 450, 40);
+
+          //it.printf(240, 550, id(font_date), TextAlign::CENTER, "%.2f, %c, %s", moonPhaseValueC, moonPhaseLetterC, moonPhaseStringC.c_str());
+          //it.printf(240, 650, id(moon_font), TextAlign::CENTER, "%c", moonPhaseLetterC);
+          //it.circle(240, 650, 40);
+
+          it.printf(240, 150, id(font_date), TextAlign::CENTER, "%s", moonPhaseStringA.c_str());
+          it.printf(240, 240, id(moon_font_big), TextAlign::CENTER, "%c", moonPhaseLetterA);
+          it.circle(240, 240, 50);
+
+          it.printf(240, 370, id(font_date), TextAlign::CENTER, "%s", moonPhaseStringB.c_str());
+          it.printf(240, 440, id(moon_font), TextAlign::CENTER, "%c", moonPhaseLetterB);
+          it.circle(240, 440, 40);
+
+          it.printf(240, 570, id(font_date), TextAlign::CENTER, "%s", moonPhaseStringC.c_str());
+          it.printf(240, 640, id(moon_font), TextAlign::CENTER, "%c", moonPhaseLetterC);
+          it.circle(240, 640, 40);          
+
+
+

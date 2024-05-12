@@ -133,10 +133,70 @@ sensor:
     entity_id: sensor.grange_wind_day_2d
     id: foreneowind2
 
-text_sensor:
+    ####Pirate Weather#####
+
+    #Today
   - platform: homeassistant
-    entity_id: weather.grange
-    id: weathernow
+    entity_id: sensor.pw_grange_apparent_temperature
+    id: pwtodaytemp
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_wind_speed
+    id: pwtodaywind
+
+    #Day1
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_overnight_low_apparent_temperature_1d
+    id: pwday1mintemp
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_daytime_high_apparent_temperature_1d
+    id: pwday1maxtemp    
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_wind_speed_1d
+    id: pwday1wind
+
+    #Day2
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_overnight_low_apparent_temperature_2d
+    id: pwday2mintemp
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_daytime_high_apparent_temperature_2d
+    id: pwday2maxtemp    
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_wind_speed_2d
+    id: pwday2wind
+    
+    #moon
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_moon_phase_0d
+    id: pwmoond0
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_moon_phase_1d
+    id: pwmoond1
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_moon_phase_2d
+    id: pwmoond2
+
+text_sensor:
+
+  #PW Icons
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_icon_0d
+    id: pwtodayicon  
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_icon_1d
+    id: pwday1icon  
+  - platform: homeassistant
+    entity_id: sensor.pw_grange_icon_2d
+    id: pwday2icon
+
+  - platform: homeassistant
+    entity_id: sensor.moon_phase
+    id: moonphase
+
+
+  #- platform: homeassistant
+  #  entity_id: weather.grange
+  #  id: weathernow
 
   #- platform: homeassistant
   #  entity_id: weather.grange
@@ -144,15 +204,15 @@ text_sensor:
   #  id: accuweatherfore
   #  internal: yes
 
-  - platform: homeassistant
-    entity_id: sensor.accuweather_condition_kyou
-    id: accucond1
-  - platform: homeassistant
-    entity_id: sensor.accuweather_condition_ashita
-    id: accucond2
-  - platform: homeassistant
-    entity_id: sensor.accuweather_condition_asatte
-    id: accucond3
+  #- platform: homeassistant
+  #  entity_id: sensor.accuweather_condition_kyou
+  #  id: accucond1
+  #- platform: homeassistant
+  #  entity_id: sensor.accuweather_condition_ashita
+  #  id: accucond2
+  #- platform: homeassistant
+  #  entity_id: sensor.accuweather_condition_asatte
+  #  id: accucond3
 
 
   - platform: sun
